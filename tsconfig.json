@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {  // ← Corrige el nombre de la propiedad
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@styles/*": ["src/styles/*"],
+      "@/*": ["src/*"]  // ← Añade este alias genérico
+    }
+  },
+  "include": ["src"]
+}
