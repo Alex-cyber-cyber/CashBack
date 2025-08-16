@@ -1,14 +1,5 @@
-/* Variables de color */
-:root {
-  --primary: #FF6B00;
-  --secondary: #FFD300;
-  --accent: #FF3D71;
-  --dark: #2E2E48;
-  --light: #FFFFFF;
-  --gradient: linear-gradient(135deg, var(--primary), var(--accent));
-}
-
-/* Estilos base */
+@import '../../../styles/variables.scss';
+@import '../../../styles/animation.scss';
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,14 +11,12 @@ body {
   overflow-x: hidden;
 }
 
-/* Contenedor principal */
 .auth-container {
   display: flex;
   min-height: 100vh;
   background-color: var(--light);
 }
 
-/* Panel izquierdo - Branding */
 .auth-left-panel {
   flex: 1;
   background: var(--gradient);
@@ -49,11 +38,6 @@ body {
   height: 200%;
   background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
   animation: rotate 20s linear infinite;
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .brand-content {
@@ -102,12 +86,6 @@ body {
   font-weight: 600;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
 .floating-rewards {
   position: relative;
   width: 100%;
@@ -123,10 +101,6 @@ body {
   animation: float 6s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
 
 .floating-points {
   position: absolute;
@@ -157,21 +131,6 @@ body {
   left: 50%;
   animation-delay: 5s;
 }
-
-@keyframes floatPoints {
-  0% { 
-    transform: translateY(0) scale(0.5);
-    opacity: 0;
-  }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { 
-    transform: translateY(-100px) scale(1.2);
-    opacity: 0;
-  }
-}
-
-/* Panel derecho - Formulario */
 .auth-right-panel {
   flex: 1;
   display: flex;
@@ -193,10 +152,10 @@ body {
 
 .login-form {
   width: 100%;
-  max-width: 450px; /* Ancho óptimo para formularios */
-  padding: 4rem 3.5rem; /* Más espacio interno vertical (4rem) que horizontal (3.5rem) */
-  margin: 2rem; /* Espacio exterior uniforme */
-  border-radius: 16px; /* Bordes más redondeados */
+  max-width: 450px; 
+  padding: 4rem 3.5rem; 
+  margin: 2rem; 
+  border-radius: 16px; 
   box-shadow: 0 10px 40px rgba(255, 107, 0, 0.1);
   position: relative;
   z-index: 1;
@@ -241,7 +200,6 @@ body {
   opacity: 0.7;
 }
 
-/* Inputs con efecto flotante */
 .floating-input {
   position: relative;
   margin-bottom: 2rem;
@@ -297,7 +255,6 @@ body {
   width: 100%;
 }
 
-/* Opciones del formulario */
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -365,7 +322,6 @@ body {
   width: 100%;
 }
 
-/* Botón de login */
 .login-button {
   width: 100%;
   padding: 1.2rem;
@@ -416,11 +372,7 @@ body {
   animation: spin 1s ease-in-out infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 
-/* Enlace de registro */
 .signup-link {
   margin-top: 1.5rem;
   text-align: center;
@@ -451,7 +403,6 @@ body {
   width: 100%;
 }
 
-/* Responsive Design */
 @media (max-width: 992px) {
   .auth-container {
     flex-direction: column;
@@ -493,38 +444,35 @@ body {
     margin-top: 1rem;
   }
 }
-/* Panel derecho - Formulario */
 .auth-right-panel {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Eliminamos el padding del contenedor */
+  padding: 0; 
 }
 
 .login-form {
   width: 100%;
-  max-width: 450px; /* Ancho óptimo para formularios */
-  padding: 4rem 3.5rem; /* Más espacio interno vertical (4rem) que horizontal (3.5rem) */
-  margin: 1rem; /* Espacio exterior uniforme */
-  border-radius: 16px; /* Bordes más redondeados */
-  box-shadow: 0 10px 40px rgba(255, 107, 0, 0.1); /* Sombra más pronunciada */
-  /* Mantén el resto de tus estilos */
+  max-width: 450px; 
+  padding: 4rem 3.5rem; 
+  margin: 1rem; 
+  border-radius: 16px; 
+  box-shadow: 0 10px 40px rgba(255, 107, 0, 0.1); 
+
 }
 
-/* Ajustes para pantallas grandes */
 @media (min-width: 1200px) {
   .login-form {
-    padding: 5rem 3rem; /* Más espacio interno en pantallas grandes */
+    padding: 5rem 3rem; 
   }
 }
 
-/* Ajuste específico para el título */
 .welcome-title {
-  margin-bottom: 1.5rem; /* Espacio después del título */
+  margin-bottom: 1.5rem; 
 }
 
-/* Espaciado entre inputs */
+
 .input-group {
-  margin-bottom: 1.8rem; /* Aumentamos espacio entre campos */
+  margin-bottom: 1.8rem; 
 }

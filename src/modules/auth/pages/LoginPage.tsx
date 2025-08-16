@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles.css';
+import "../Styles/styles.scss";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +19,6 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulación de login
     setTimeout(() => {
       setIsLoading(false);
     }, 1500);
@@ -27,7 +26,6 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      {/* Panel izquierdo - Branding */}
       <div className="auth-left-panel">
         <div className="brand-content">
           <h1 className="brand-title">Transforma tus compras en <span className="highlight">recompensas</span></h1>
@@ -50,7 +48,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Panel derecho - Formulario */}
       <div className="auth-right-panel">
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-header">
