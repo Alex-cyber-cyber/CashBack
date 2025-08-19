@@ -134,10 +134,11 @@ body {
 .auth-right-panel {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;  
+  align-items: center;   
+  justify-content: flex-start; 
+  padding: 3rem 2rem;     
 }
-
 .auth-right-panel::before {
   content: '';
   position: absolute;
@@ -169,9 +170,10 @@ body {
 }
 
 .form-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem; 
   text-align: center;
 }
+
 
 .welcome-title {
   font-size: 2rem;
@@ -475,4 +477,74 @@ body {
 
 .input-group {
   margin-bottom: 1.8rem; 
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;              
+  width: 100%;
+  max-width: 450px;
+  align-items: center;   
+}
+
+.auth-right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     
+  justify-content: flex-start; 
+  padding: 3rem 2rem;
+}
+
+.form-header {
+  text-align: center;
+  margin-top: 3rem;    
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;              
+  width: 100%;
+  max-width: 450px;
+  align-items: center;    
+}
+
+.option-card {
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--primary); 
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  text-align: center;   
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.back-button-container {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.back-button {
+  background: transparent;
+  color: var(--accent);
+  border: 0px solid var(--accent);
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: var(--accent);
+  color: #fff;
 }
