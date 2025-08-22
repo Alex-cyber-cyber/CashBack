@@ -1,18 +1,21 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from './modules/auth/pages/LoginPage';
-import RegisterOptions from './modules/auth/pages/RegisterOptions';
+import LoginPage from "./modules/auth/pages/LoginPage";
+import RegisterOptions from "./modules/auth/pages/RegisterOptions";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/register" replace />} />
 
-        <Route path="/" element={<Navigate to="/LoginPage" replace />} />
-         <Route path="/register" element={<RegisterOptions />} />
-        <Route path="/LoginPage" element={<LoginPage />} />
-
+        <Route path="/register" element={<RegisterOptions />} />
+        <Route path="/register/emprendedor" element={<div>Registro Emprendedor</div>} />
+        <Route path="/register/cliente" element={<div>Registro Cliente</div>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<Navigate to="/register" replace />} />
       </Routes>
     </BrowserRouter>
   );
 }
-export default App
+
+export default App;
