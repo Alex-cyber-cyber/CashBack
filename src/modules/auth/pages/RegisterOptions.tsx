@@ -7,7 +7,6 @@ const RegisterOptions = () => {
 
   return (
     <div className="auth-container">
-      {/* Panel izquierdo igual que en Login */}
       <div className="auth-left-panel">
         <div className="brand-content">
           <h1 className="brand-title">
@@ -19,7 +18,7 @@ const RegisterOptions = () => {
         </div>
       </div>
 
-      {/* Panel derecho con opciones */}
+  
       <div className="auth-right-panel">
         <div className="form-header">
           <h2 className="welcome-title">Elige tu tipo de cuenta</h2>
