@@ -1,4 +1,4 @@
-
+@import 'bootstrap/dist/css/bootstrap.min.css';
 :root {
   --primary: #FF6B00;
   --secondary: #FFD300;
@@ -6,4 +6,221 @@
   --dark: #2E2E48;
   --light: #FFFFFF;
   --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --info:    #0EA5E9;
+  --muted:   #8A8AA3;
+
+  --radius-sm: 10px;
+  --radius:    16px;
+  --radius-lg: 24px;
+
+  --shadow-sm: 0 4px 12px rgba(0,0,0,.06);
+  --shadow:    0 10px 30px rgba(0,0,0,.08);
+  --shadow-lg: 0 18px 48px rgba(0,0,0,.12);
+
+  --surface: #F7F7FB;           /* fondo de app */
+  --card-bg: #FFFFFF;           /* fondo tarjetas */
+  --glass: rgba(255,255,255,0.6);
+  --glass-border: rgba(255,255,255,0.38);
+  --focus-ring: 0 0 0 0.25rem rgba(255,107,0,.25);
+
+  /* gradients reutilizables */
+  --gradient-soft: linear-gradient(135deg, #FFEAD6 0%, #FFD6E1 100%);
+  --gradient-dark: linear-gradient(135deg, #2E2E48 0%, #1F1F33 100%);
+
+
+    /* === THEME TOKENS (LIGHT) === */
+  --surface: #F7F7FB;
+  --card-bg: #FFFFFF;
+  --text: #2E2E48;
+  --text-muted: #8A8AA3;
+  --border: rgba(0,0,0,.08);
+  --elev-1: 0 4px 12px rgba(0,0,0,.06);
+  --elev-2: 0 10px 30px rgba(0,0,0,.08);
+  --ring: 0 0 0 0.25rem rgba(255,107,0,.25);
 }
+
+.shadow-soft { box-shadow: var(--shadow) !important; }
+.rounded-xl  { border-radius: var(--radius-lg) !important; }
+.text-muted-2{ color: var(--muted) !important; }
+.bg-surface  { background: var(--surface) !important; }
+
+
+:root[data-theme="dark"] {
+  --surface: #1B1B27;
+  --card-bg: #1F2130;
+  --text: #E7E7F2;
+  --text-muted: #A2A2BE;
+  --border: rgba(255,255,255,.08);
+  --elev-1: 0 4px 12px rgba(0,0,0,.5);
+  --elev-2: 0 18px 48px rgba(0,0,0,.6);
+
+}
+/* =========================
+   DARK THEME – Dashboard
+   Requiere tokens en :root[data-theme="dark"]
+   ========================= */
+:root[data-theme="dark"] {
+  /* tonos ajustados para mejor contraste */
+  --surface: #0F1220;            /* fondo app */
+  --card-bg: #161A2B;            /* paneles/tarjetas */
+  --text: #E9EAF5;               /* texto principal */
+  --text-muted: #B4B7D1;         /* texto secundario */
+  --border: rgba(255,255,255,.08);
+  --elev-1: 0 6px 14px rgba(0,0,0,.55);
+  --elev-2: 0 18px 48px rgba(0,0,0,.65);
+
+  /* controles */
+  --input-bg: #1B2033;
+  --input-border: #2A3250;
+  --input-placeholder: #9096B6;
+
+  /* chips/elementos */
+  --chip-bg: #232948;
+  --thead-bg: transparent;
+  --row-hover: rgba(255,255,255,.03);
+
+  /* feedback */
+  --warn-bg: rgba(245,158,11,.12);
+  --warn-border: rgba(245,158,11,.35);
+  --warn-text: #F7D08A;
+
+  /* gradiente se mantiene; si lo quieres más suave de noche, descomenta */
+  /* --gradient: linear-gradient(135deg, #FF7A1E 0%, #FF4C7B 100%); */
+}
+
+:root[data-theme="dark"] .dashboard {
+  background: var(--surface);
+  color: var(--text);
+
+  /* === texto: forzamos claro en todos los básicos === */
+  h1, h2, h3, h4, h5, h6,
+  p, span, label, small, strong,
+  .form-label, .text-muted, .text-muted-2,
+  .nav-link, .brand, .fw-semibold, .fw-bold {
+    color: var(--text) !important;
+  }
+  .text-muted, .text-muted-2, .table-card table thead th,
+  .activity .time, .withdraw .rule small { color: var(--text-muted) !important; }
+
+  /* === contenedores === */
+  .sidebar,
+  .topbar .search .form-control,
+  .content .card,
+  .withdraw .provider {
+    background: var(--card-bg);
+    color: var(--text);
+  }
+
+  .sidebar {
+    border-right: 1px solid var(--border);
+    box-shadow: var(--elev-1);
+
+    .nav-link {
+      border: 1px solid transparent;
+      &:hover { background: rgba(255,255,255,.05); border-color: var(--border); }
+      &.active { background: var(--gradient); color: #fff !important; box-shadow: var(--elev-2); }
+      svg { opacity: .95; }
+    }
+
+    .get-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+    }
+  }
+
+  /* === topbar === */
+  .topbar {
+    .search .form-control {
+      background: var(--input-bg);
+      border-color: var(--input-border);
+      color: var(--text);
+      &::placeholder { color: var(--input-placeholder); }
+      &:focus { box-shadow: var(--ring); }
+    }
+    .input-group-text {
+      background: var(--input-bg);
+      border-color: var(--input-border);
+      color: var(--text-muted);
+    }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      box-shadow: var(--elev-1);
+      &:hover { background: rgba(255,255,255,.04); }
+    }
+
+    .btn-light.border {
+      background: #20253A;
+      color: var(--text);
+      border-color: var(--border);
+    }
+  }
+
+  /* === tarjetas de métricas === */
+  .stat {
+    .stat-bg { opacity: .18; }
+    .icon-badge { background: #23263A; color: var(--text); }
+    .value { color: var(--text); }
+    .trend.up { color: var(--success); }
+    .trend.down { color: var(--accent); }
+  }
+
+  /* === widget de retiro === */
+  .withdraw {
+    .provider { border: 1px dashed var(--border); }
+    .btn-withdraw { /* mantiene gradiente brillante sobre oscuro */
+      background: var(--gradient); color:#fff; border:none;
+    }
+    .rule {
+      border-left: 3px solid var(--primary);
+      small { color: var(--text-muted); }
+    }
+  }
+
+  /* alertas */
+  .alert-warning {
+    background: var(--warn-bg);
+    border-color: var(--warn-border);
+    color: var(--warn-text);
+  }
+
+  /* === tabla === */
+  .table-card {
+    .card-body { background: var(--card-bg); }
+    table {
+      --bs-table-bg: transparent;
+      thead th {
+        background: var(--thead-bg);
+        color: var(--text-muted) !important;
+        border-bottom: 1px solid var(--border);
+      }
+      tbody td {
+        color: var(--text);
+        border-color: var(--border);
+      }
+      tbody tr:hover { background: var(--row-hover); }
+      .status {
+        background: var(--chip-bg);
+        color: var(--text);
+        border: 1px solid var(--border);
+        &.ok   { background: rgba(34,197,94,.15); color: #7EE2A8; border-color: rgba(34,197,94,.25); }
+        &.hold { background: rgba(245,158,11,.15); color: #F9C97D; border-color: rgba(245,158,11,.25); }
+        &.fail { background: rgba(255,61,113,.18); color: #FF8FB0; border-color: rgba(255,61,113,.28); }
+      }
+    }
+  }
+
+  .activity .item .dot { background: var(--primary); }
+  .activity .item .time { color: var(--text-muted); }
+
+  .content .card { box-shadow: var(--elev-1); }
+  .sidebar .brand .dot { box-shadow: 0 0 0 3px rgba(255,255,255,.06); }
+}
+
+
+
