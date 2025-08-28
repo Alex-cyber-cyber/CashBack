@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./modules/auth/pages/LoginPage";
-import RegisterOptions from "./modules/auth/pages/RegisterOptions";
-import RegisterEmprendedor from "./modules/auth/pages/RegisterEmprendedor";
-import DashboardPage from "./modules/dashboard/pages/DashboardPage";
+import LoginPage from "./modules/clientes/auth/pages/LoginPage";
+import RegisterOptions from "./modules/clientes/auth/pages/RegisterOptions";
+import RegisterEmprendedor from "./modules/clientes/auth/pages/RegisterEmprendedor";
+import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
 
 function App() {
   return (
