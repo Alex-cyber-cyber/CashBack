@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../Styles/loginEmprendedor.scss"; // nuevo archivo de estilos solo para emprendedor
+import "../Styles/loginEmprendedor.scss"; 
 
 const LoginEmprendedor = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +26,6 @@ const LoginEmprendedor = () => {
 
   return (
     <div className="auth-container-emprendedor">
-      {/* Panel izquierdo */}
       <div className="auth-left-panel-emprendedor">
         <div className="brand-content">
           <h1 className="brand-title">
@@ -38,7 +37,6 @@ const LoginEmprendedor = () => {
         </div>
       </div>
 
-      {/* Panel derecho */}
       <div className="auth-right-panel-emprendedor">
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-header">
@@ -53,7 +51,7 @@ const LoginEmprendedor = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder=" "
+              placeholder="email"
               required
             />
             <label htmlFor="email">Email</label>
@@ -67,7 +65,7 @@ const LoginEmprendedor = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder=" "
+              placeholder="password"
               required
             />
             <label htmlFor="password">Contraseña</label>

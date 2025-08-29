@@ -1,0 +1,87 @@
+:root {
+  --font-family: 'Poppins', sans-serif;
+  --font-size-base: 16px;
+
+  --primary: #FF6B00;
+  --secondary: #FFD300;
+  --accent: #FF3D71;
+  --light: #FFFFFF;
+  --dark: #2E2E48;
+
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --info: #0EA5E9;
+  --muted: #8A8AA3;
+
+  --surface: #F7F7FB;
+  --card-bg: #FFFFFF;
+  --text: #2E2E48;
+  --text-muted: #88837f;
+  --border: rgba(0, 0, 0, .08);
+
+  --emp-primary: #007f5f;     
+  --emp-secondary: #001f3f;   
+  --emp-accent: #4efcbf;      
+
+  --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+  --gradient-soft: linear-gradient(135deg, #FFEAD6 0%, #FFD6E1 100%);
+  --gradient-dark: linear-gradient(135deg, #2E2E48 0%, #1F1F33 100%);
+  --gradient-emp: linear-gradient(135deg, var(--emp-secondary), var(--emp-primary));
+  --gradient-emp-soft: linear-gradient(135deg, rgba(0,31,63,.85), rgba(0,127,95,.85));
+
+  --sp-1: .5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2rem;
+  --sp-6: 3rem;
+  --sp-8: 4rem;
+
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius: 16px;
+  --radius-lg: 24px;
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, .06);
+  --shadow: 0 10px 30px rgba(0, 0, 0, .08);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, .12);
+  --elev-1: 0 4px 12px rgba(0, 0, 0, .06);
+  --elev-2: 0 10px 30px rgba(0, 0, 0, .08);
+
+  --focus-ring: 0 0 0 0.25rem rgba(255, 107, 0, .25);
+  --focus-ring-emp: 0 0 0 0.25rem rgba(0, 127, 95, .25);
+
+  --bp-sm: 576px;
+  --bp-md: 992px;
+  --bp-xl: 1200px;
+
+  --thead-bg: transparent;
+  --row-hover: rgba(0, 0, 0, .02);
+  --chip-bg: rgba(0,0,0,.04);
+
+  --input-bg: #FFFFFF;
+  --input-border: #e0e0e0;
+  --input-placeholder: #999;
+}
+
+:root[data-theme="dark"] {
+  --surface: #0F1220;
+  --card-bg: #161A2B;
+  --text: #E9EAF5;
+  --text-muted: #c24d2f; 
+  --border: rgba(255, 255, 255, .08);
+
+  --elev-1: 0 6px 14px rgba(0, 0, 0, .55);
+  --elev-2: 0 18px 48px rgba(0, 0, 0, .65);
+
+  --input-bg: #1B2033;
+  --input-border: #2A3250;
+  --input-placeholder: #9096B6;
+
+  --chip-bg: #232948;
+  --thead-bg: transparent;
+  --row-hover: rgba(255, 255, 255, .03);
+
+  --warn-bg: rgba(245, 158, 11, .12);
+  --warn-border: rgba(245, 158, 11, .35);
+  --warn-text: #F7D08A;
+}

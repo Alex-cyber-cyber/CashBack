@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../Styles/styles.scss";
+import "./styles.scss";
 
 const RegisterOptions = () => {
   const navigate = useNavigate();

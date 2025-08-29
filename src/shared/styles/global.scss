@@ -1,0 +1,30 @@
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+@import './variables.scss';
+@import './animation.scss';
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: var(--font-size-base); }
+body { font-family: var(--font-family); overflow-x: hidden; }
+
+.link-acento {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+}
+.link-acento::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  height: 2px; width: 0;
+  background: var(--accent);
+  transition: width .3s;
+}
+.link-acento:hover::after { width: 100%; }
+
+.shadow-soft { box-shadow: var(--shadow) !important; }
+.rounded-xl { border-radius: var(--radius-lg) !important; }
+.text-muted-2 { color: var(--muted) !important; }
+.bg-surface { background: var(--surface) !important; }

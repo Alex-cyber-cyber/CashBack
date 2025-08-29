@@ -26,7 +26,6 @@ const RegisterEmprendedor = () => {
 
   return (
     <div className="auth-container">
-      {/* Panel izquierdo */}
       <div className="auth-left-panel">
         <div className="brand-content">
           <h1 className="brand-title">

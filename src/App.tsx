@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./modules/clientes/auth/pages/LoginPage";
-import RegisterOptions from "./modules/clientes/auth/pages/RegisterOptions";
-import RegisterEmprendedor from "./modules/clientes/auth/pages/RegisterEmprendedor";
+import RegisterOptions from "./modules/RegisterOptions";
+import RegisterEmprendedor from "./modules/emprendedores/auth/pages/RegisterEmprendedor";
 import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
+import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedor";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register/emprendedor" element={<RegisterEmprendedor />} />
         <Route path="/register/cliente" element={<div>Registro Cliente</div>} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/login/emprendedor" element={<LoginEmprendedor />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate to="/register" replace />} />
       </Routes>
