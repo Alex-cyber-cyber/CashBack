@@ -5,6 +5,7 @@ import RegisterEmprendedor from "./modules/emprendedores/auth/pages/RegisterEmpr
 import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
 import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedor";
 import RegisterCliente from "./modules/clientes/auth/pages/RegisterCliente";
+import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp";
 
 function App() {
   return (
@@ -14,10 +15,15 @@ function App() {
 
         <Route path="/register" element={<RegisterOptions />} />
         <Route path="/register/emprendedor" element={<RegisterEmprendedor />} />
-        <Route path="/register/cliente" element={<RegisterCliente/>} />
+        <Route path="/register/cliente" element={<RegisterCliente />} />
+
+        {/* Dashboards */}
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard/emprendedor" element={<DashboardEmp />} /> {}
+
         <Route path="/login/emprendedor" element={<LoginEmprendedor />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route path="*" element={<Navigate to="/register" replace />} />
       </Routes>
     </BrowserRouter>
