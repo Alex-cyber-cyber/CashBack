@@ -1,7 +1,6 @@
 :root {
   --font-family: 'Poppins', sans-serif;
   --font-size-base: 16px;
-
   --primary: #FF6B00;
   --secondary: #FFD300;
   --accent: #FF3D71;
@@ -19,9 +18,9 @@
   --text-muted: #88837f;
   --border: rgba(0, 0, 0, .08);
 
-  --emp-primary: #007f5f;     
-  --emp-secondary: #001f3f;   
-  --emp-accent: #4efcbf;      
+  --emp-primary: #007f5f;   //emprendedor
+  --emp-secondary: #001f3f;  //emprendedor
+  --emp-accent: #4efcbf;     //emprendedor
 
   --gradient: linear-gradient(135deg, var(--primary), var(--accent));
   --gradient-soft: linear-gradient(135deg, #FFEAD6 0%, #FFD6E1 100%);

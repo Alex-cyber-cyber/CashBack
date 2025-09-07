@@ -114,7 +114,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="%23FF6B00" stroke-width="0.5" stroke-dasharray="5,5"/></svg>');
+    background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="%23FF6B00" strokeWidth="0.5" stroke-dasharray="5,5"/></svg>');
     opacity: 0.05;
     z-index: 0;
   }
@@ -316,3 +316,5 @@ body {
 @media (min-width: 1200px) {
   .login-form { padding: var(--sp-8) var(--sp-4); }
 }
+
+

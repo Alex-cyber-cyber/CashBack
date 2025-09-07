@@ -1,0 +1,163 @@
+/* src/modules/emprendedores/dashboard/Styles/dashboardEmp.scss */
+@import '../../../../shared/styles/variables.scss';
+@import '../../../../shared/styles/animation.scss';
+@import '../../../../shared/styles/global.scss';
+
+/* ===== NAMESPACE EMPRENDEDORES ===== */
+.emp-dashboard {
+
+  .emp-grid {
+    --sbw: 260px;
+    --stat-overlay-op: .55;
+    --stat-overlay-op-dark: .18;
+    display: grid;
+    grid-template-columns: var(--sbw) 1fr;
+    grid-template-areas: "sidebar main";
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-family);
+  }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    grid-area: sidebar;
+    width: var(--sbw);
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--elev-1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .brand {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 800; color: var(--text);
+
+      .dot {
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--gradient-emp);   /* <- verde */
+        animation: pulse 2.2s infinite;
+      }
+    }
+
+    .nav { display: grid; gap: 8px; }
+
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      font-weight: 600; color: var(--text);
+      border: 1px solid transparent;
+      transition: background .2s, border-color .2s, color .2s;
+
+      svg { opacity: .85; }
+      span { white-space: nowrap; }
+
+      &:hover {
+        background: var(--gradient-emp-soft); /* <- nombre correcto */
+        border-color: var(--border);
+      }
+
+      &.active {
+        background: var(--gradient-emp);
+        color: #fff; box-shadow: var(--elev-2);
+        svg { opacity: 1; }
+      }
+    }
+
+    .get-card{
+      background: var(--gradient-emp-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+    }
+
+    .btn-gradient {
+      background: var(--gradient-emp);
+      color: #fff; border: none;
+      border-radius: var(--radius);
+      padding: .6rem .9rem;
+    }
+  }
+
+  /* ---- Main ---- */
+  .main { grid-area: main; min-width: 0; }
+
+  .topbar {
+    display: flex; align-items: center; gap: 12px; padding: 16px;
+
+    .hamburger {
+      display: inline-grid; place-items: center;
+      width: 40px; height: 40px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card-bg); color: var(--text);
+    }
+
+    .search { flex: 1; }
+    .search .form-control{
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      padding: .75rem 1rem;
+    }
+    .search .form-control::placeholder { color: var(--text-muted); }
+    .input-group-text { background: var(--card-bg); border-color: var(--border); color: var(--text-muted); }
+
+    .theme-toggle{
+      border:1px solid var(--border); background: var(--card-bg);
+      border-radius: 999px; padding: .45rem .7rem;
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-weight:700; box-shadow: var(--elev-1); color: var(--text);
+    }
+
+    .btn-light.border{ background: var(--card-bg); color: var(--text); border-color: var(--border); }
+
+    .user{
+      display:flex; align-items:center; gap:.75rem;
+      .avatar{
+        width:32px; height:32px; border-radius:50%;
+        background: var(--gradient-emp); color:#fff;
+        display:grid; place-items:center; font-weight:800;
+      }
+    }
+  }
+
+  .content {
+    padding: 16px;
+
+    .card{
+      border: none; border-radius: var(--radius-lg);
+      box-shadow: var(--elev-1);
+      background: var(--card-bg); color: var(--text);
+    }
+
+    .stat { position: relative; overflow: hidden; }
+    .option-card .highlight { color: var(--emp-accent); }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 992px) {
+    .emp-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "sidebar"
+        "main";
+    }
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+
+  /* ---- Dark tweaks dentro del namespace ---- */
+  :root[data-theme="dark"] & {
+    .sidebar .nav-link:hover { background: rgba(255,255,255,.05); }
+    .topbar .theme-toggle:hover { background: rgba(255,255,255,.04); }
+  }
+}

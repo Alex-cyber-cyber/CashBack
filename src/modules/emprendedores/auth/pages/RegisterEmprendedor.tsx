@@ -68,7 +68,7 @@ const RegisterEmprendedor = () => {
   return (
     <div className="register-emprendedor">
       <div className="auth-container">
-      
+
         <div className="auth-left-panel">
           <button
             className="back-button"
@@ -97,7 +97,6 @@ const RegisterEmprendedor = () => {
               </p>
             </div>
 
-     
             <h3 className="section-title">Cuenta y contacto</h3>
             <div className="inputs-grid">
               <div className="input-group floating-input">
@@ -166,143 +165,143 @@ const RegisterEmprendedor = () => {
               </div>
             </div>
 
-            
-           <h3 className="section-title">Datos del negocio</h3>
-<div className="inputs-grid">
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="nombreComercial"
-      placeholder=" "
-      value={formData.nombreComercial}
-      onChange={handleChange}
-      required
-    />
-    <label>Nombre comercial</label>
-    <div className="input-highlight"></div>
-  </div>
 
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="razonSocial"
-      placeholder=" "
-      value={formData.razonSocial}
-      onChange={handleChange}
-      required
-    />
-    <label>Razón social</label>
-    <div className="input-highlight"></div>
-  </div>
+            <h3 className="section-title">Datos del negocio</h3>
+            <div className="inputs-grid">
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="nombreComercial"
+                  placeholder=" "
+                  value={formData.nombreComercial}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Nombre comercial</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="rtn"
-      placeholder=" "
-      value={formData.rtn}
-      onChange={handleChange}
-      required
-    />
-    <label>RTN / ID tributario</label>
-    <div className="input-highlight"></div>
-  </div>
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="razonSocial"
+                  placeholder=" "
+                  value={formData.razonSocial}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Razón social</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <select
-      name="categoria"
-      value={formData.categoria}
-      onChange={handleChange}
-      required
-    >
-      <option value="">Selecciona una categoría</option>
-      <option value="alimentacion">Alimentación</option>
-      <option value="tecnologia">Tecnología</option>
-      <option value="moda">Moda</option>
-      <option value="servicios">Servicios</option>
-      <option value="otros">Otros</option>
-    </select>
-    <label>Categoría del negocio</label>
-    <div className="input-highlight"></div>
-  </div>
-  <div className="input-group floating-input full-width">
-    <textarea
-      name="descripcion"
-      placeholder=" "
-      value={formData.descripcion}
-      onChange={handleChange}
-      required
-    />
-    <label>Descripción del negocio</label>
-    <div className="input-highlight"></div>
-  </div>
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="rtn"
+                  placeholder=" "
+                  value={formData.rtn}
+                  onChange={handleChange}
+                  required
+                />
+                <label>RTN / ID tributario</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="pais"
-      placeholder=" "
-      value={formData.pais}
-      onChange={handleChange}
-      required
-    />
-    <label>País</label>
-    <div className="input-highlight"></div>
-  </div>
+              <div className="input-group floating-input">
+                <select
+                  name="categoria"
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecciona una categoría</option>
+                  <option value="alimentacion">Alimentación</option>
+                  <option value="tecnologia">Tecnología</option>
+                  <option value="moda">Moda</option>
+                  <option value="servicios">Servicios</option>
+                  <option value="otros">Otros</option>
+                </select>
+                <label>Categoría del negocio</label>
+                <div className="input-highlight"></div>
+              </div>
+              <div className="input-group floating-input full-width">
+                <textarea
+                  name="descripcion"
+                  placeholder=" "
+                  value={formData.descripcion}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Descripción del negocio</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <select
-      name="departamento"
-      value={formData.departamento}
-      onChange={handleChange}
-      required
-    >
-      <option value="">Selecciona un departamento</option>
-      <option value="francisco-morazan">Francisco Morazán</option>
-      <option value="cortes">Cortés</option>
-      <option value="atlantida">Atlántida</option>
-      <option value="choluteca">Choluteca</option>
-      <option value="otros">Otros</option>
-    </select>
-    <label>Departamento</label>
-    <div className="input-highlight"></div>
-  </div>
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="pais"
+                  placeholder=" "
+                  value={formData.pais}
+                  onChange={handleChange}
+                  required
+                />
+                <label>País</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="ciudad"
-      placeholder=" "
-      value={formData.ciudad}
-      onChange={handleChange}
-      required
-    />
-    <label>Ciudad</label>
-    <div className="input-highlight"></div>
-  </div>
+              <div className="input-group floating-input">
+                <select
+                  name="departamento"
+                  value={formData.departamento}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecciona un departamento</option>
+                  <option value="francisco-morazan">Francisco Morazán</option>
+                  <option value="cortes">Cortés</option>
+                  <option value="atlantida">Atlántida</option>
+                  <option value="choluteca">Choluteca</option>
+                  <option value="otros">Otros</option>
+                </select>
+                <label>Departamento</label>
+                <div className="input-highlight"></div>
+              </div>
 
-  <div className="input-group floating-input">
-    <input
-      type="text"
-      name="direccion"
-      placeholder=" "
-      value={formData.direccion}
-      onChange={handleChange}
-      required
-    />
-    <label>Dirección</label>
-    <div className="input-highlight"></div>
-  </div>
-  <div className="input-group full-width">
-    <input
-      type="file"
-      name="logo"
-      accept="image/*"
-      onChange={handleChange}
-    />
-    <label>Logo del negocio</label>
-  </div>
-</div>
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="ciudad"
+                  placeholder=" "
+                  value={formData.ciudad}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Ciudad</label>
+                <div className="input-highlight"></div>
+              </div>
+
+              <div className="input-group floating-input">
+                <input
+                  type="text"
+                  name="direccion"
+                  placeholder=" "
+                  value={formData.direccion}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Dirección</label>
+                <div className="input-highlight"></div>
+              </div>
+              <div className="input-group full-width">
+                <input
+                  type="file"
+                  name="logo"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+                <label>Logo del negocio</label>
+              </div>
+            </div>
 
             <button type="submit" className="login-button">
               Registrarme
