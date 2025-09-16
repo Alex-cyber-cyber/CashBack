@@ -155,6 +155,29 @@
     }
   }
 
+  .detail-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+
+  .card-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .empty-state {
+    min-height: 240px;
+    color: var(--text-muted);
+  }
+}
+
+.option-card.active {
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+  box-shadow: 0 12px 28px rgba(0,0,0,.08);
+}
+
+
   /* ---- Dark tweaks dentro del namespace ---- */
   :root[data-theme="dark"] & {
     .sidebar .nav-link:hover { background: rgba(255,255,255,.05); }

@@ -1,42 +1,58 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./modules/clientes/auth/pages/LoginPage";
+// src/App.tsx
+import React from "react";
+import { Navigate, RouteObject, useRoutes } from "react-router-dom";
+
+// PÚBLICAS / AUTH
 import RegisterOptions from "./modules/RegisterOptions";
 import RegisterEmprendedor from "./modules/emprendedores/auth/pages/RegisterEmprendedor";
-import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
-import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedor";
 import RegisterCliente from "./modules/clientes/auth/pages/RegisterCliente";
-import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp";
+import LoginPage from "./modules/clientes/auth/pages/LoginPage";
+import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedor";
+
+// DASHBOARDS (clientes y legacy emprendedor)
+import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
+import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp"; // si aún lo usas
+
+// PROTEGIDAS
 import ProtectedRoute from "./routes/ProtectedRoute";
-import CanjePuntosForm from "./modules/emprendedores/CanjePuntos/pages/CanjePuntos";
+
+// RUTAS DEL MÓDULO EMPRENDEDORES (nuevo layout + páginas: panel, registrar, canjear, historial, config)
+import { emprendedoresRoutes } from "./modules/emprendedores/dashboard/routes";
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/register" replace />} />
+  // Define TODO el árbol de rutas aquí
+  const routes: RouteObject[] = [
+    // redirect raíz
+    { path: "/", element: <Navigate to="/register" replace /> },
 
-      <Route path="/register" element={<RegisterOptions />} />
-      <Route path="/register/emprendedor" element={<RegisterEmprendedor />} />
-      <Route path="/register/cliente" element={<RegisterCliente />} />
-      <Route path="/login/emprendedor" element={<LoginEmprendedor />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/CanjePuntos" element={<CanjePuntosForm />} />
+    // públicas
+    { path: "/register", element: <RegisterOptions /> },
+    { path: "/register/emprendedor", element: <RegisterEmprendedor /> },
+    { path: "/register/cliente", element: <RegisterCliente /> },
+    { path: "/login", element: <LoginPage /> },
+    { path: "/login/emprendedor", element: <LoginEmprendedor /> },
 
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/dashboard/emprendedor"
-        element={
-            <DashboardEmp />
-        }
-      />
+    // dashboard de clientes (protegido)
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute>
+          <DashboardPage />
+        </ProtectedRoute>
+      ),
+    },
 
-      <Route path="*" element={<Navigate to="/register" replace />} />
-    </Routes>
-  );
+    // (opcional) dashboard emprendedor legacy si todavía lo usas en paralelo
+    { path: "/dashboard/emprendedor", element: <DashboardEmp /> },
+
+    // >>> módulo Emprendedores NUEVO: /emp, /emp/panel, /emp/canjear, etc.
+    emprendedoresRoutes,
+
+    // catch-all
+    { path: "*", element: <Navigate to="/register" replace /> },
+  ];
+
+  // Render del árbol
+  const element = useRoutes(routes);
+  return element;
 }

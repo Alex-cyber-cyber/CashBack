@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "../Styles/dashboardEmp.scss";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import {
   FiPlusCircle, FiGift, FiClock, FiSettings,
-  FiBell, FiSearch, FiMoon, FiSun, FiMenu
+  FiBell, FiSearch, FiMoon, FiSun, FiMenu, FiGrid
 } from "react-icons/fi";
+import "../Styles/dashboardEmp.scss"; 
 
-const DashboardPage: React.FC = () => {
+
+const EmpDashboardLayout: React.FC = () => {
   const [theme, setTheme] = useState<"light" | "dark">(
     () => (localStorage.getItem("theme") as "light" | "dark") || "light"
   );
+  const navigate = useNavigate();
+  const dark = theme === "dark";
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
-
-  const dark = theme === "dark";
 
   const ThemeToggle = () => (
     <button
@@ -34,32 +36,37 @@ const DashboardPage: React.FC = () => {
       <div className="emp-grid">
         {/* Sidebar */}
         <aside className="sidebar d-none d-lg-flex">
-          <div className="brand">
+          <div className="brand" onClick={() => navigate("/emp/panel")} role="button">
             <span className="dot" />
             <span className="brand-text">Emprende+</span>
           </div>
 
           <nav className="nav flex-column">
-            <a className="nav-link active" href="#">
+            <NavLink className="nav-link" to="/emp/panel">
+              <FiGrid /><span>Panel</span>
+            </NavLink>
+            <NavLink className="nav-link" to="/emp/registrar">
               <FiPlusCircle /><span>Registrar Puntos</span>
-            </a>
-            <a className="nav-link" href="#">
+            </NavLink>
+            <NavLink className="nav-link" to="/emp/CanjePuntos">
               <FiGift /><span>Canjear Puntos</span>
-            </a>
-            <a className="nav-link" href="#">
+            </NavLink>
+            <NavLink className="nav-link" to="/emp/historial">
               <FiClock /><span>Historial</span>
-            </a>
-            <a className="nav-link" href="#">
+            </NavLink>
+            <NavLink className="nav-link" to="/emp/config">
               <FiSettings /><span>Configuración</span>
-            </a>
+            </NavLink>
           </nav>
 
           <div className="get-card mt-auto">
             <div className="fw-bold mb-1">Consejo</div>
             <div className="small text-muted mb-2">
-              Registra y canjea puntos fácilmente para tus clientes.
+              Usa el Panel para acceder rápido a Registrar/Canjear.
             </div>
-            <button className="btn btn-gradient w-100">Más info</button>
+            <button className="btn btn-gradient w-100" onClick={() => navigate("/emp/panel")}>
+              Ir al Panel
+            </button>
           </div>
         </aside>
 
@@ -95,64 +102,35 @@ const DashboardPage: React.FC = () => {
             </div>
           </header>
 
+          {/* Aquí se renderizan las páginas */}
           <section className="content">
-            <div className="row g-3 mb-3">
-              <div className="col-12 col-md-4">
-                <div className="card stat h-100 option-card">
-                  <div className="card-body text-center">
-                    <FiPlusCircle size={28} className="mb-2 highlight" />
-                    <h6>Registrar Puntos</h6>
-                    <p className="text-muted small">Agrega puntos a un cliente</p>
-                    <button className="btn btn-primary w-100">Registrar</button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-12 col-md-4">
-                <div className="card stat h-100 option-card">
-                  <div className="card-body text-center">
-                    <FiGift size={28} className="mb-2 highlight" />
-                    <h6>Canjear Puntos</h6>
-                    <p className="text-muted small">Permite usar puntos acumulados</p>
-                    <button className="btn btn-success w-100">Canjear</button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-12 col-md-4">
-                <div className="card stat h-100 option-card">
-                  <div className="card-body text-center">
-                    <FiClock size={28} className="mb-2 highlight" />
-                    <h6>Historial</h6>
-                    <p className="text-muted small">Revisa registros y canjes</p>
-                    <button className="btn btn-secondary w-100">Ver historial</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Outlet />
           </section>
         </div>
 
         {/* Sidebar móvil */}
         <aside id="sbOffEmp" className="offcanvas offcanvas-start sidebar d-lg-none">
           <div className="offcanvas-body p-0 d-flex flex-column">
-            <div className="brand">
+            <div className="brand" data-bs-dismiss="offcanvas" onClick={() => navigate("/emp/panel")} role="button">
               <span className="dot" />
               <span className="brand-text">Emprende+</span>
             </div>
             <nav className="nav flex-column">
-              <a className="nav-link active" data-bs-dismiss="offcanvas" href="#">
+              <NavLink className="nav-link" to="/emp/panel" data-bs-dismiss="offcanvas">
+                <FiGrid /><span>Panel</span>
+              </NavLink>
+              <NavLink className="nav-link" to="/emp/registrar" data-bs-dismiss="offcanvas">
                 <FiPlusCircle /><span>Registrar Puntos</span>
-              </a>
-              <a className="nav-link" data-bs-dismiss="offcanvas" href="#">
+              </NavLink>
+              <NavLink className="nav-link" to="/emp/canjear" data-bs-dismiss="offcanvas">
                 <FiGift /><span>Canjear Puntos</span>
-              </a>
-              <a className="nav-link" data-bs-dismiss="offcanvas" href="#">
+              </NavLink>
+              <NavLink className="nav-link" to="/emp/historial" data-bs-dismiss="offcanvas">
                 <FiClock /><span>Historial</span>
-              </a>
-              <a className="nav-link" data-bs-dismiss="offcanvas" href="#">
+              </NavLink>
+              <NavLink className="nav-link" to="/emp/config" data-bs-dismiss="offcanvas">
                 <FiSettings /><span>Configuración</span>
-              </a>
+              </NavLink>
             </nav>
           </div>
         </aside>
@@ -161,4 +139,4 @@ const DashboardPage: React.FC = () => {
   );
 };
 
-export default DashboardPage;
+export default EmpDashboardLayout;
