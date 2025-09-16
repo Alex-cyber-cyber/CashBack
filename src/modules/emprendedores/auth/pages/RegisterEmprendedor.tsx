@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "../Styles/RegistroEmprendedor.scss";
 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../../../firebase/firebase.config";
+import { ensureEntrepreneurProfile } from "../services/emprendedor.services";
+
 interface FormData {
   nombrePropietario: string;
   email: string;
@@ -43,9 +47,7 @@ const RegisterEmprendedor = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value, files } = e.target as HTMLInputElement;
     setFormData((prev) => ({
@@ -54,7 +56,7 @@ const RegisterEmprendedor = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmarPassword) {
@@ -62,7 +64,41 @@ const RegisterEmprendedor = () => {
       return;
     }
 
-    console.log("Datos enviados:", formData);
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      
+      await ensureEntrepreneurProfile({
+        uid: user.uid,
+        email: formData.email,
+        displayName: formData.nombreComercial,
+        phone: formData.telefono,
+        nombrePropietario: formData.nombrePropietario,
+        nombreComercial: formData.nombreComercial,
+        razonSocial: formData.razonSocial,
+        rtn: formData.rtn,
+        categoria: formData.categoria,
+        descripcion: formData.descripcion,
+        pais: formData.pais,
+        departamento: formData.departamento,
+        ciudad: formData.ciudad,
+        direccion: formData.direccion,
+        logo: formData.logo ? formData.logo.name : "",
+        provider: "password",
+        emailVerified: false,
+        role: "Emprendedor",  
+      });
+
+      alert("Registro exitoso 🎉");
+      navigate("/login/emprendedor"); 
+    } catch (error: any) {
+      console.error("Error registrando emprendedor:", error.code, error.message);
+      alert("Hubo un error: " + error.message);
+    }
   };
 
   return (
@@ -92,11 +128,10 @@ const RegisterEmprendedor = () => {
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-header">
               <h2 className="welcome-title">Registro Emprendedor</h2>
-              <p className="welcome-subtitle">
-                Completa la información básica
-              </p>
+              <p className="welcome-subtitle">Completa la información básica</p>
             </div>
 
+            {/* Cuenta y contacto */}
             <h3 className="section-title">Cuenta y contacto</h3>
             <div className="inputs-grid">
               <div className="input-group floating-input">
@@ -165,7 +200,7 @@ const RegisterEmprendedor = () => {
               </div>
             </div>
 
-
+            {/* Datos del negocio */}
             <h3 className="section-title">Datos del negocio</h3>
             <div className="inputs-grid">
               <div className="input-group floating-input">

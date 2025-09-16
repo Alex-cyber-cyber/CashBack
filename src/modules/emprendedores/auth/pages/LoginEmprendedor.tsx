@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import "../Styles/loginEmprendedor.scss"; 
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../../../../firebase/firebase.config";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginEmprendedor = () => {
   const navigate = useNavigate();
@@ -23,11 +23,35 @@ const LoginEmprendedor = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
+  e.preventDefault();
+  setIsLoading(true);
+
+   try {
+
+      const { user } = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const docRef = doc(db, "Emprendedores", user.uid); 
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        alert("Perfil de emprendedor no encontrado 🚨");
+        await auth.signOut();
+        return;
+      }
+
+      const perfil = docSnap.data();
+      if (perfil.role === "Emprendedor") {
+        navigate("/dashboard/emprendedor");
+      } else {
+        alert("No tienes permisos para acceder como emprendedor 🚫");
+        await auth.signOut();
+      }
+
+    } catch (error: any) {
+      console.error(error);
+      alert("Error al iniciar sesión: " + error.message);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -39,7 +63,7 @@ const LoginEmprendedor = () => {
                   >
                     <ChevronLeft size={48} color="white" />
                   </button>
-        
+
 
 
         <div className="brand-content">

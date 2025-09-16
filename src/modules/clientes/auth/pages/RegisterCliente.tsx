@@ -8,8 +8,8 @@ import {
   loginWithGithub,
   loginWithGoogle,
   signUpWithEmail,
-} from "../services/auth.service";
-import { useAuth } from "../hooks/useAuth";
+   } from "../services/auth.service";
+   import { useAuth } from "../hooks/useAuth";
 
 const RegisterCliente = () => {
   const navigate = useNavigate();
