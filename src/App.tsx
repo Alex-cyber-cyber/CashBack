@@ -7,6 +7,7 @@ import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedo
 import RegisterCliente from "./modules/clientes/auth/pages/RegisterCliente";
 import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import CanjePuntosForm from "./modules/emprendedores/CanjePuntos/pages/CanjePuntos";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/register/cliente" element={<RegisterCliente />} />
       <Route path="/login/emprendedor" element={<LoginEmprendedor />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/CanjePuntos" element={<CanjePuntosForm />} />
 
       <Route
         path="/dashboard"

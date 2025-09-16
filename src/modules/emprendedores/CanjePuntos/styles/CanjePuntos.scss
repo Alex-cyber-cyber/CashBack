@@ -1,0 +1,267 @@
+@import '../../../../shared/styles/variables.scss';
+
+/* -------------------------------------------------------
+   Canje de Puntos — UI/UX (solo estilos, sin lógica)
+   Scope: .canje-form  (evita side-effects globales)
+--------------------------------------------------------*/
+.canje-form {
+  font-family: var(--font-family);
+  color: var(--text);
+
+  /* Layout base */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-header {
+    background: linear-gradient(0deg, var(--card-bg), var(--card-bg)),
+                var(--gradient-soft);
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    padding: var(--sp-2) var(--sp-3);
+
+    h1, .h4, .h5 {
+      color: var(--dark);
+    }
+  }
+
+  .card-body { padding: var(--sp-3); }
+  .card-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius) !important;
+  }
+
+  /* Chip de marca */
+  .brand-chip {
+    background: rgba(255, 107, 0, .08);     /* --primary suavizado */
+    color: var(--primary);
+    border: 1px solid rgba(255, 107, 0, .22);
+    border-radius: var(--radius-md);
+    letter-spacing: .2px;
+  }
+
+  /* Tips */
+  .tips {
+    background: var(--surface);
+    border-color: var(--border) !important;
+    border-radius: var(--radius-md);
+  }
+
+  /* Inputs */
+  .form-label { color: var(--dark); }
+
+  .input-group-text {
+    background: var(--surface);
+    color: var(--muted);
+    border-color: var(--input-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .form-control {
+    background: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    padding: .65rem .9rem;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+
+    &::placeholder { color: var(--input-placeholder); }
+    &:hover { border-color: color-mix(in srgb, var(--primary), #000 10%); }
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring);
+      outline: none;
+    }
+    &:disabled {
+      opacity: .7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* Validación visual (Bootstrap classes de referencia) */
+  .form-control.is-valid {
+    border-color: var(--success);
+    padding-right: calc(1.5em + .75rem);
+    background-image: none;
+    box-shadow: 0 0 0 .15rem color-mix(in srgb, var(--success) 25%, transparent);
+  }
+  .form-control.is-invalid {
+    border-color: var(--accent);
+    padding-right: calc(1.5em + .75rem);
+    background-image: none;
+    box-shadow: 0 0 0 .15rem color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .form-text { color: var(--text-muted); }
+
+  /* Botones (scoped overrides) */
+  .btn {
+    border-radius: var(--radius-sm);
+    padding: .6rem 1rem;
+    font-weight: 600;
+    letter-spacing: .2px;
+    transition: transform .08s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease;
+
+    &:active { transform: translateY(1px); }
+    &:focus-visible { box-shadow: var(--focus-ring); }
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    border-color: color-mix(in srgb, var(--primary) 85%, #000 15%);
+    color: var(--light);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--primary) 25%, transparent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--primary) 88%, #000 12%);
+      border-color: color-mix(in srgb, var(--primary) 70%, #000 30%);
+    }
+  }
+
+  .btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: transparent;
+
+    &:hover {
+      color: var(--light);
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 6px 14px color-mix(in srgb, var(--primary) 25%, transparent);
+    }
+  }
+
+  .btn-light {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+
+    &:hover {
+      background: color-mix(in srgb, var(--surface) 75%, #fff 25%);
+    }
+  }
+
+  /* Sección de resumen */
+  .summary-tile {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: var(--sp-2);
+  }
+
+  .summary-tile .avatar {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient);
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  }
+
+  .stat {
+    border-color: var(--border) !important;
+    border-radius: var(--radius-md);
+    box-shadow: var(--elev-1);
+    background: var(--card-bg);
+
+    .text-secondary { color: var(--text-muted) !important; }
+  }
+
+  /* Modal */
+  .modal-content {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .modal-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .modal-footer { border-top: 1px solid var(--border); }
+
+  /* Tooltips (opcional) */
+  .tooltip {
+    --bs-tooltip-bg: var(--dark);
+    --bs-tooltip-color: var(--light);
+  }
+
+  /* Estados “skeleton” (opcional para placeholders de datos) */
+  .skeleton {
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--surface) 70%, #ddd 30%);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+    animation: shimmer 1.3s infinite;
+  }
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* Tablas / hr / borders suaves */
+  hr { border-color: var(--border); opacity: 1; }
+
+  /* Accesibilidad y focus */
+  a, button, .form-control, .input-group-text {
+    &:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+  }
+
+  /* Breakpoints (usando tokens) */
+  @media (max-width: 576px) {
+    .card-body { padding: var(--sp-2) !important; }
+    .brand-chip { display: none; }
+  }
+
+  @media (min-width: 992px) {
+    .card-body { padding: var(--sp-3) !important; }
+  }
+
+  /* Dark theme overrides (respetando :root[data-theme="dark"]) */
+  :root[data-theme="dark"] & {
+    .brand-chip {
+      background: rgba(255, 107, 0, .15);
+      border-color: rgba(255, 107, 0, .25);
+    }
+
+    .input-group-text {
+      background: var(--input-bg);
+      color: var(--text-muted);
+      border-color: var(--input-border);
+    }
+
+    .btn-light {
+      background: #1a1f34;
+      border-color: var(--border);
+      color: var(--text);
+
+      &:hover { background: #232a45; }
+    }
+
+    .tips { background: color-mix(in srgb, var(--card-bg) 60%, #000 40%); }
+  }
+}
+
+.text-secondary { color: var(--text-muted) !important; }
+.canje-form.embedded {
+  .card { box-shadow: var(--shadow-sm); }
+  .card-header h1 { font-size: 1.05rem; }
+  .card-body { padding: var(--sp-2) var(--sp-2) !important; }
+}
+
+.badge.bg-light {
+  background-color: var(--surface) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
