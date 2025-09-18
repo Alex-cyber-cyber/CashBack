@@ -15,8 +15,8 @@ export interface UserProfile {
     departamento: string;
     ciudad: string;
     direccion: string;
-    logo?: string; 
-
+    logo?: string;  
+    maximoCredito: number;
 
     role: UserRole; 
     provider: 'password' | 'google' | 'github' | 'facebook';

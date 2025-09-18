@@ -18,7 +18,7 @@ const RegisterOptions = () => {
         </div>
       </div>
 
-  
+
       <div className="auth-right-panel">
         <div className="form-header">
           <h2 className="welcome-title">Elige tu tipo de cuenta</h2>
@@ -28,7 +28,7 @@ const RegisterOptions = () => {
         <div className="options-container">
           <div
             className="option-card"
-            onClick={() => navigate("/login/emprendedor")}
+            onClick={() => navigate("/register/emprendedor")}
           >
             <h3 className="welcome-title">🚀 Soy Emprendedor</h3>
             <p className="brand-subtitle">
@@ -40,13 +40,13 @@ const RegisterOptions = () => {
             className="option-card"
             onClick={() => navigate("/login")}
           >
-        <h3 className="welcome-title">🛍️ Soy Cliente</h3>
-        <p className="brand-subtitle">
-        Inicia sesion o Registrate y descubre productos únicos y gana recompensas en tus compras.
-        </p>
+            <h3 className="welcome-title">🛍️ Soy Cliente</h3>
+            <p className="brand-subtitle">
+              Inicia sesion o Registrate y descubre productos únicos y gana recompensas en tus compras.
+            </p>
+          </div>
         </div>
-        </div>
-               
+
       </div>
     </div>
   );

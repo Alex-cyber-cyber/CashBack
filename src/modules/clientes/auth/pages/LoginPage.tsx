@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../Styles/styles.scss";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import {  loginWithFacebook, loginWithGoogle, loginWithGithub, handleAuthRedirectResult } from '../services/auth.service';
+import {  loginWithGoogle, handleAuthRedirectResult } from '../services/auth.service';
 import SocialButtons from '../components/SocialButtons';
 import { useAuth } from '../hooks/useAuth';
 import { auth } from '../../../../../firebase/firebase.config'; 
@@ -33,9 +33,7 @@ const Login = () => {
     if (user) navigate(from, { replace: true });
   }, [user, from, navigate]);
 
-  const handleGoogleLogin = async () => { await loginWithGoogle(); };   // redirect
-  const handleGithubLogin  = async () => { await loginWithGithub(); };  // redirect
-  const handleFacebookLogin = async () => { await loginWithFacebook(); };// redirect
+  const handleGoogleLogin = async () => { await loginWithGoogle(); };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,8 +86,6 @@ const Login = () => {
 
           <SocialButtons
             onGoogle={handleGoogleLogin}
-            onGithub={handleGithubLogin}
-            onFacebook={handleFacebookLogin}
           />
           <h1></h1>
           <div className="input-group floating-input">

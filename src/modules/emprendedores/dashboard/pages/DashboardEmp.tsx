@@ -54,9 +54,6 @@ const EmpDashboardLayout: React.FC = () => {
             <NavLink className="nav-link" to="/emp/historial">
               <FiClock /><span>Historial</span>
             </NavLink>
-            <NavLink className="nav-link" to="/emp/config">
-              <FiSettings /><span>Configuración</span>
-            </NavLink>
           </nav>
 
           <div className="get-card mt-auto">
