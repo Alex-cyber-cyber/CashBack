@@ -13,7 +13,7 @@ const EmpPanel: React.FC = () => {
             <FiPlusCircle size={28} className="mb-2 highlight" />
             <h6>Registrar Puntos</h6>
             <p className="text-muted small">Agrega puntos a un cliente</p>
-            <button className="btn btn-primary w-100" onClick={() => navigate("/emp/registrar")}>
+            <button className="btn btn-primary w-100" onClick={() => navigate("/emp/RegistroPuntos")}>
               Registrar
             </button>
           </div>

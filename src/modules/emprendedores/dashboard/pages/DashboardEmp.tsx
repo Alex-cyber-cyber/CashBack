@@ -45,7 +45,7 @@ const EmpDashboardLayout: React.FC = () => {
             <NavLink className="nav-link" to="/emp/panel">
               <FiGrid /><span>Panel</span>
             </NavLink>
-            <NavLink className="nav-link" to="/emp/registrar">
+            <NavLink className="nav-link" to="/emp/RegistroPuntos">
               <FiPlusCircle /><span>Registrar Puntos</span>
             </NavLink>
             <NavLink className="nav-link" to="/emp/CanjePuntos">
@@ -119,7 +119,7 @@ const EmpDashboardLayout: React.FC = () => {
               <NavLink className="nav-link" to="/emp/panel" data-bs-dismiss="offcanvas">
                 <FiGrid /><span>Panel</span>
               </NavLink>
-              <NavLink className="nav-link" to="/emp/registrar" data-bs-dismiss="offcanvas">
+              <NavLink className="nav-link" to="/emp/RegistroPuntos" data-bs-dismiss="offcanvas">
                 <FiPlusCircle /><span>Registrar Puntos</span>
               </NavLink>
               <NavLink className="nav-link" to="/emp/canjear" data-bs-dismiss="offcanvas">
