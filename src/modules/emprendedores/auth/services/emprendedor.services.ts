@@ -29,12 +29,19 @@ export async function ensureEntrepreneurProfile(
     role: "Emprendedor",
     provider: input.provider ?? "password",
     emailVerified: input.emailVerified ?? !!auth.currentUser?.emailVerified,
-    createdAt: new Date(), 
-    updatedAt: new Date(), 
+    createdAt: new Date(),
+    updatedAt: new Date(),
+
+    // 👇 nuevo
+    maximoCredito: input.maximoCredito ?? 0,
   };
 
   if (!snap.exists()) {
-    await setDoc(ref, { ...base, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }, { merge: true });
+    await setDoc(
+      ref,
+      { ...base, createdAt: serverTimestamp(), updatedAt: serverTimestamp() },
+      { merge: true }
+    );
     return base;
   } else {
     const updates = {
@@ -52,10 +59,11 @@ export async function ensureEntrepreneurProfile(
       direccion: base.direccion,
       logo: base.logo,
       updatedAt: serverTimestamp(),
+
+      maximoCredito: base.maximoCredito,
     };
     await updateDoc(ref, updates as any);
 
-   
     const data = snap.data() as any;
     return {
       ...base,

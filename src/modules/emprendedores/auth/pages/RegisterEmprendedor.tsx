@@ -23,6 +23,7 @@ interface FormData {
   ciudad: string;
   direccion: string;
   logo: File | null;
+  maximoCredito: number; 
 }
 
 const RegisterEmprendedor = () => {
@@ -44,15 +45,22 @@ const RegisterEmprendedor = () => {
     ciudad: "",
     direccion: "",
     logo: null,
+    maximoCredito: 0, 
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value, files } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
-      [name]: files ? files[0] : value,
+      [name]: files
+        ? files[0]
+        : name === "maximoCredito"
+        ? Number(value) 
+        : value,
     }));
   };
 
@@ -71,7 +79,6 @@ const RegisterEmprendedor = () => {
         formData.password
       );
 
-      
       await ensureEntrepreneurProfile({
         uid: user.uid,
         email: formData.email,
@@ -90,11 +97,12 @@ const RegisterEmprendedor = () => {
         logo: formData.logo ? formData.logo.name : "",
         provider: "password",
         emailVerified: false,
-        role: "Emprendedor",  
+        role: "Emprendedor",
+        maximoCredito: formData.maximoCredito, 
       });
 
       alert("Registro exitoso 🎉");
-      navigate("/login/emprendedor"); 
+      navigate("/login/emprendedor");
     } catch (error: any) {
       console.error("Error registrando emprendedor:", error.code, error.message);
       alert("Hubo un error: " + error.message);
@@ -104,7 +112,6 @@ const RegisterEmprendedor = () => {
   return (
     <div className="register-emprendedor">
       <div className="auth-container">
-
         <div className="auth-left-panel">
           <button
             className="back-button"
@@ -123,7 +130,6 @@ const RegisterEmprendedor = () => {
           </div>
         </div>
 
-
         <div className="auth-right-panel">
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-header">
@@ -134,6 +140,7 @@ const RegisterEmprendedor = () => {
             {/* Cuenta y contacto */}
             <h3 className="section-title">Cuenta y contacto</h3>
             <div className="inputs-grid">
+              {/* Campos de cuenta */}
               <div className="input-group floating-input">
                 <input
                   type="text"
@@ -259,6 +266,7 @@ const RegisterEmprendedor = () => {
                 <label>Categoría del negocio</label>
                 <div className="input-highlight"></div>
               </div>
+
               <div className="input-group floating-input full-width">
                 <textarea
                   name="descripcion"
@@ -327,6 +335,23 @@ const RegisterEmprendedor = () => {
                 <label>Dirección</label>
                 <div className="input-highlight"></div>
               </div>
+
+              {/* Nuevo campo: Máximo porcentaje de crédito */}
+              <div className="input-group floating-input">
+                <input
+                  type="number"
+                  name="maximoCredito"
+                  placeholder=" "
+                  value={formData.maximoCredito}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  max="100"
+                />
+                <label>Máximo porcentaje de crédito (%)</label>
+                <div className="input-highlight"></div>
+              </div>
+
               <div className="input-group full-width">
                 <input
                   type="file"
