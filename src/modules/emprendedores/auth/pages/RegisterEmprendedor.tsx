@@ -348,7 +348,7 @@ const RegisterEmprendedor = () => {
                   min="0"
                   max="100"
                 />
-                <label>Máximo porcentaje de crédito (%)</label>
+                <label>Porcentaje cashback (%)</label>
                 <div className="input-highlight"></div>
               </div>
 
