@@ -2,11 +2,23 @@
 import React, { useId, useMemo, useState } from "react";
 import "../Components/Styles/CanjePuntos.scss";
 
+type ValidacionRespuesta = {
+  ok: boolean;
+  puntos?: number;
+};
+
+type ConfirmacionPayload = {
+  correo: string;
+  identidad: string;
+  codigo: string;
+  puntos: number;
+};
+
 type Props = {
   embedded?: boolean;
   puntosDisponibles?: number;
-  onValidate?: (correo: string, identidad: string) => Promise<{ ok: boolean; puntos?: number }>;
-  onConfirm?: (payload: { correo: string; identidad: string; puntos: number }) => Promise<void> | void;
+  onValidate?: (correo: string, identidad: string, codigo: string) => Promise<ValidacionRespuesta>;
+  onConfirm?: (payload: ConfirmacionPayload) => Promise<void> | void;
 };
 
 export default function CanjePuntosForm({
@@ -15,22 +27,29 @@ export default function CanjePuntosForm({
   onValidate,
   onConfirm,
 }: Props) {
-  // ID único para modal
+  // IDs únicos (evita ":" para atributos HTML)
   const uid = useId().replace(/:/g, "-");
   const modalId = `confirmCanjeModal-${uid}`;
 
-  // Estado del formulario
+  // ----- Estado del formulario -----
   const [identidad, setIdentidad] = useState("");
   const [correo, setCorreo] = useState("");
+  const [codigo, setCodigo] = useState(""); // NUEVO: Código de Canje
   const [puntos, setPuntos] = useState("");
 
+  // Estado de validación remota / puntos disponibles
   const [validating, setValidating] = useState(false);
   const [validated, setValidated] = useState<"idle" | "ok" | "error">("idle");
   const [pDisp, setPDisp] = useState<number | undefined>(puntosDisponiblesProp);
 
-  // Validaciones
+  // ----- Reglas & validaciones locales -----
   const correoValido = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo), [correo]);
+
+  // Formato HN típico: 4-4-5 dígitos (permite guiones)
   const identidadValida = useMemo(() => /^\d{4}-\d{4}-\d{5}$/.test(identidad), [identidad]);
+
+  // Código alfanumérico 6–12 (insensible a mayúsculas). Ajusta el rango según negocio.
+  const codigoValido = useMemo(() => /^[A-Z0-9]{6,12}$/i.test(codigo.trim()), [codigo]);
 
   const puntosNum = useMemo(() => {
     const n = Number(puntos);
@@ -40,20 +59,24 @@ export default function CanjePuntosForm({
   const puntosValidos = Number.isFinite(puntosNum);
   const dentroDeDisponibles = pDisp === undefined || (puntosValidos && puntosNum <= pDisp);
 
-  const puedeContinuar = correoValido && identidadValida && puntosValidos && dentroDeDisponibles;
+  const puedeContinuar =
+    correoValido && identidadValida && codigoValido && puntosValidos && dentroDeDisponibles;
 
+  // ----- Acciones -----
   async function handleValidate() {
-    if (!correoValido || !identidadValida) {
+    // Validación local previa
+    if (!correoValido || !identidadValida || !codigoValido) {
       setValidated("error");
       return;
     }
+    // Si no hay validación remota, considera ok
     if (!onValidate) {
       setValidated("ok");
       return;
     }
     try {
       setValidating(true);
-      const res = await onValidate(correo, identidad);
+      const res = await onValidate(correo, identidad, codigo.trim());
       setValidated(res.ok ? "ok" : "error");
       if (res.ok && typeof res.puntos === "number") setPDisp(res.puntos);
     } finally {
@@ -64,6 +87,7 @@ export default function CanjePuntosForm({
   function handleReset() {
     setIdentidad("");
     setCorreo("");
+    setCodigo("");
     setPuntos("");
     setValidated("idle");
     setPDisp(puntosDisponiblesProp);
@@ -71,16 +95,21 @@ export default function CanjePuntosForm({
 
   async function handleConfirm() {
     if (!puedeContinuar || !onConfirm) return;
-    await onConfirm({ correo, identidad, puntos: puntosNum });
+    await onConfirm({
+      correo,
+      identidad,
+      codigo: codigo.trim().toUpperCase(),
+      puntos: puntosNum,
+    });
   }
 
-  // Wrapper 
-  const wrapperClass = embedded
-    ? "canje-form embedded"
-    : "container my-4 canje-form";
-
+  // ----- Presentación -----
+  const wrapperClass = embedded ? "canje-form embedded" : "container my-4 canje-form";
   const puntosDispMostrar = typeof pDisp === "number" ? pDisp : "—";
   const puntosMostrar = puntos === "" ? "—" : puntos;
+
+  // Nombre visible en resumen (antes del @)
+  const aliasCliente = correo ? correo.split("@")[0] : "Nombre del cliente";
 
   return (
     <div className={wrapperClass}>
@@ -96,11 +125,13 @@ export default function CanjePuntosForm({
               <form noValidate>
                 {/* IDENTIDAD */}
                 <div className="mb-3">
-                  <label htmlFor="identidad" className="form-label fw-semibold">Identidad</label>
+                  <label htmlFor={`identidad-${uid}`} className="form-label fw-semibold">
+                    Identidad
+                  </label>
                   <div className="input-group">
                     <span className="input-group-text">#</span>
                     <input
-                      id="identidad"
+                      id={`identidad-${uid}`}
                       name="identidad"
                       type="text"
                       inputMode="numeric"
@@ -109,18 +140,23 @@ export default function CanjePuntosForm({
                       value={identidad}
                       maxLength={15}
                       onChange={(e) => setIdentidad(e.target.value)}
+                      aria-describedby={`identidad-help-${uid}`}
                     />
                   </div>
-                  <div className="form-text">Formato sugerido: ####-####-#####.</div>
+                  <div id={`identidad-help-${uid}`} className="form-text">
+                    Formato: ####-####-#####.
+                  </div>
                 </div>
 
                 {/* CORREO */}
-                <div className="mb-1">
-                  <label htmlFor="correo" className="form-label fw-semibold">Correo electrónico</label>
+                <div className="mb-3">
+                  <label htmlFor={`correo-${uid}`} className="form-label fw-semibold">
+                    Correo electrónico
+                  </label>
                   <div className="input-group">
                     <span className="input-group-text">@</span>
                     <input
-                      id="correo"
+                      id={`correo-${uid}`}
                       name="correo"
                       type="email"
                       className={`form-control ${correo && !correoValido ? "is-invalid" : ""}`}
@@ -131,13 +167,37 @@ export default function CanjePuntosForm({
                   </div>
                 </div>
 
+                {/* CÓDIGO DE CANJE */}
+                <div className="mb-3">
+                  <label htmlFor={`codigo-${uid}`} className="form-label fw-semibold">
+                    Código de Canje de Puntos
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">COD</span>
+                    <input
+                      id={`codigo-${uid}`}
+                      name="codigo"
+                      type="text"
+                      className={`form-control ${codigo && !codigoValido ? "is-invalid" : ""}`}
+                      placeholder="ABC123"
+                      value={codigo}
+                      onChange={(e) => setCodigo(e.target.value.toUpperCase())}
+                      autoComplete="one-time-code"
+                      inputMode="text"
+                      maxLength={12}
+                    />
+                  </div>
+                  <div className="form-text">Use 6 a 12 caracteres alfanuméricos (A–Z, 0–9).</div>
+                </div>
+
                 {/* VALIDAR */}
                 <div className="d-flex justify-content-end mb-3">
                   <button
                     type="button"
                     className={`btn btn-outline-${validated === "ok" ? "success" : "primary"} btn-sm`}
                     onClick={handleValidate}
-                    disabled={validating || !correoValido || !identidadValida}
+                    disabled={validating || !correoValido || !identidadValida || !codigoValido}
+                    aria-live="polite"
                   >
                     {validating ? "Validando…" : validated === "ok" ? "✓ Validado" : "Validar"}
                   </button>
@@ -146,7 +206,7 @@ export default function CanjePuntosForm({
                 {/* PUNTOS */}
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-end">
-                    <label htmlFor="puntos" className="form-label fw-semibold mb-0">
+                    <label htmlFor={`puntos-${uid}`} className="form-label fw-semibold mb-0">
                       Puntos a canjear
                     </label>
                     <span className="small text-secondary">Mín. 0 • Máx. disponible</span>
@@ -154,7 +214,7 @@ export default function CanjePuntosForm({
                   <div className="input-group">
                     <span className="input-group-text">PTS</span>
                     <input
-                      id="puntos"
+                      id={`puntos-${uid}`}
                       name="puntos"
                       type="number"
                       min={0}
@@ -195,7 +255,7 @@ export default function CanjePuntosForm({
           </div>
         </div>
 
-        {/* Resumen */}
+        {/* Resumen (siempre visible) */}
         <div className={embedded ? "col-12 col-lg-5" : "col-12 col-md-10 col-lg-5"}>
           <div className="card shadow-sm h-100">
             <div className="card-body p-4" aria-live="polite">
@@ -208,7 +268,7 @@ export default function CanjePuntosForm({
                 <div className="d-flex align-items-center gap-2">
                   <div className="avatar bg-primary-subtle rounded-circle" aria-hidden="true" />
                   <div>
-                    <div className="fw-semibold">{correo ? correo.split("@")[0] : "Nombre del cliente"}</div>
+                    <div className="fw-semibold">{aliasCliente}</div>
                     <div className="text-secondary small">{correo || "cliente@correo.com"}</div>
                   </div>
                 </div>
@@ -234,15 +294,23 @@ export default function CanjePuntosForm({
                     <div className="stat border rounded-3 p-3 bg-light-subtle">
                       <div className="text-secondary small">Observaciones</div>
                       <div className="fw-medium">
-                        {correo ? "Presione “Validar” para cargar datos del cliente." : "Ingrese correo y valide para ver datos."}
+                        {validated === "ok"
+                          ? "Cliente validado. Puede continuar con el canje."
+                          : "Presione “Validar” para cargar y confirmar datos del cliente."}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-3 small text-secondary">
-                  <span className="me-1">Identidad:</span>
-                  <span className="fw-semibold">{identidad || "—"}</span>
+                  <div>
+                    <span className="me-1">Identidad:</span>
+                    <span className="fw-semibold">{identidad || "—"}</span>
+                  </div>
+                  <div>
+                    <span className="me-1">Código de Canje:</span>
+                    <span className="fw-semibold">{codigo || "—"}</span>
+                  </div>
                 </div>
               </div>
 
@@ -254,7 +322,7 @@ export default function CanjePuntosForm({
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal de confirmación */}
       <div className="modal fade" id={modalId} aria-hidden="true" aria-labelledby={`${modalId}-label`} tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -265,14 +333,27 @@ export default function CanjePuntosForm({
             <div className="modal-body">
               Revise los datos antes de confirmar:
               <ul className="mt-2 mb-0">
-                <li><span className="text-secondary">Cliente:</span> {correo ? correo.split("@")[0] : "—"}</li>
-                <li><span className="text-secondary">Correo:</span> {correo || "—"}</li>
-                <li><span className="text-secondary">Puntos a canjear:</span> {puntosMostrar}</li>
-                <li><span className="text-secondary">Identidad:</span> {identidad || "—"}</li>
+                <li>
+                  <span className="text-secondary">Cliente:</span> {aliasCliente}
+                </li>
+                <li>
+                  <span className="text-secondary">Correo:</span> {correo || "—"}
+                </li>
+                <li>
+                  <span className="text-secondary">Identidad:</span> {identidad || "—"}
+                </li>
+                <li>
+                  <span className="text-secondary">Código de Canje:</span> {codigo || "—"}
+                </li>
+                <li>
+                  <span className="text-secondary">Puntos a canjear:</span> {puntosMostrar}
+                </li>
               </ul>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" className="btn btn-light" data-bs-dismiss="modal">
+                Cancelar
+              </button>
               <button
                 type="button"
                 className="btn btn-primary"
