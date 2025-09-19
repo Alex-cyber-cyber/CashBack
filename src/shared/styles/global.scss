@@ -1,8 +1,6 @@
-
-@import 'bootstrap/dist/css/bootstrap.min.css';
-
-@import './variables.scss';
-@import './animation.scss';
+﻿@use "bootstrap/dist/css/bootstrap.min.css" as *;
+@use "./variables" as *;
+@use "./animation" as *;
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: var(--font-size-base); }

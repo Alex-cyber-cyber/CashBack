@@ -1,6 +1,6 @@
-@import '../shared/styles/variables.scss';
-@import '../shared/styles/animation.scss';
-@import '../shared/styles/global.scss';
+@use '../shared/styles/variables' as *;
+@use '../shared/styles/animation' as *;
+@use '../shared/styles/global' as *;
 * {
   box-sizing: border-box;
   margin: 0;
@@ -289,7 +289,7 @@ body {
 }
 
 .custom-checkbox:checked::after {
-  content: '✓';
+  content: 'âœ“';
   position: absolute;
   color: white;
   font-size: 0.8rem;

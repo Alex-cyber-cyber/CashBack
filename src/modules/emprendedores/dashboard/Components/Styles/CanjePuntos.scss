@@ -1,7 +1,7 @@
-@import '../../../../../shared/styles/variables.scss';
+@use '../../../../../shared/styles/variables' as *;
 
 /* -------------------------------------------------------
-   Canje de Puntos — UI/UX (solo estilos, sin lógica)
+   Canje de Puntos â€” UI/UX (solo estilos, sin lÃ³gica)
    Scope: .canje-form  (evita side-effects globales)
 --------------------------------------------------------*/
 .canje-form {
@@ -82,7 +82,7 @@
     }
   }
 
-  /* Validación visual (Bootstrap classes de referencia) */
+  /* ValidaciÃ³n visual (Bootstrap classes de referencia) */
   .form-control.is-valid {
     border-color: var(--success);
     padding-right: calc(1.5em + .75rem);
@@ -145,7 +145,7 @@
     }
   }
 
-  /* Sección de resumen */
+  /* SecciÃ³n de resumen */
   .summary-tile {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -190,7 +190,7 @@
     --bs-tooltip-color: var(--light);
   }
 
-  /* Estados “skeleton” (opcional para placeholders de datos) */
+  /* Estados â€œskeletonâ€ (opcional para placeholders de datos) */
   .skeleton {
     position: relative;
     border-radius: var(--radius-sm);

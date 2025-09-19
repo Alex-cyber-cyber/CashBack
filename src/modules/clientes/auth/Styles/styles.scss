@@ -1,6 +1,6 @@
-@import '../../../../shared/styles/variables.scss';
-@import '../../../../shared/styles/animation.scss';
-@import '../../../../shared/styles/global.scss';
+@use '../../../../shared/styles/variables' as *;
+@use '../../../../shared/styles/animation' as *;
+@use '../../../../shared/styles/global' as *;
 
 * {
   box-sizing: border-box;
@@ -238,7 +238,7 @@ body {
     border-color: transparent;
 
     &::after {
-      content: '✓';
+      content: 'âœ“';
       position: absolute;
       color: #fff;
       font-size: .8rem;

@@ -1,4 +1,4 @@
-@import '../../../../shared/styles/variables.scss';
+@use '../../../../shared/styles/variables' as *;
 
 .register-emprendedor {
 
@@ -222,7 +222,7 @@
 
   @media (max-width: 768px) {
     .inputs-grid {
-      grid-template-columns: 1fr; // apila inputs en móviles
+      grid-template-columns: 1fr; // apila inputs en mÃ³viles
     }
   }
 

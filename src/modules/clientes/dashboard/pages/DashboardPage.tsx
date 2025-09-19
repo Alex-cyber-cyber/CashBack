@@ -26,15 +26,37 @@ const fmt = (v: number, currency: "HNL" | "USD" = "HNL") =>
     isFinite(v) ? v : 0
   );
 
-const getInitials = (nameOrEmail: string) => {
-  if (!nameOrEmail) return "US";
-  const clean = nameOrEmail.split("@")[0];
-  const parts = clean.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[1][0]).toUpperCase();
+/** === UserAvatar integrado === */
+const UserAvatar: React.FC<{
+  photoURL?: string | null;
+  size?: number;
+}> = ({ photoURL, size = 38 }) => {
+  const [error, setError] = useState(false);
+
+  if (photoURL && !error) {
+    return (
+      <img
+        src={photoURL}
+        alt="Avatar"
+        className="avatar-img"
+        style={{ width: size, height: size }}
+        onError={() => setError(true)}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="avatar-fallback"
+      style={{ width: size, height: size }}
+      aria-label="Avatar"
+    >
+      <FiUser size={size * 0.55} />
+    </div>
+  );
 };
 
-/** UI building blocks */
+/** === Tarjeta estadística === */
 type Tendencia = { dir: "up" | "down"; texto: string };
 
 const StatCard: React.FC<{
@@ -62,6 +84,7 @@ const StatCard: React.FC<{
   </div>
 );
 
+/** === Tabla de transacciones === */
 const RecentTable: React.FC = () => {
   const rows = [
     { store: "Amazon", date: "2025-08-14", amount: 1290.5, status: "ok" },
@@ -118,6 +141,7 @@ const RecentTable: React.FC = () => {
   );
 };
 
+/** === Actividad === */
 const Activity: React.FC = () => (
   <div className="card h-100">
     <div className="card-body">
@@ -141,6 +165,7 @@ const Activity: React.FC = () => (
   </div>
 );
 
+/** === Tema claro/oscuro === */
 const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState<"light" | "dark">(
     () => (localStorage.getItem("theme") === "dark" ? "dark" : "light")
@@ -162,214 +187,10 @@ const ThemeToggle: React.FC = () => {
   );
 };
 
-/** === PayPal Withdraw Widget (UI only) === */
-const PaypalWithdrawWidget: React.FC = () => {
-  const [paypalEmail, setPaypalEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [currency, setCurrency] = useState<"HNL" | "USD">("HNL");
-  const [amountStr, setAmountStr] = useState("1500.00");
-  const [note, setNote] = useState("");
-  const [accept, setAccept] = useState(false);
-
-  const amount = useMemo(
-    () => Number(String(amountStr).replace(/[^\d.]/g, "")) || 0,
-    [amountStr]
-  );
-
-  // Tasas de ejemplo (UI, no contractuales):
-  // - Tarifa Swapp: 2%
-  // - Tarifa PayPal estimada (ejemplo): 3.49% + 0.30 USD (si es USD)
-  //   En HNL solo mostramos "estimado" (no calculamos fijo de 0.30 USD).
-  const swappFee = amount * 0.02;
-  const paypalPct = 0.0349;
-  const paypalFixedUSD = 0.3;
-
-  const paypalFee =
-    currency === "USD" ? amount * paypalPct + paypalFixedUSD : amount * paypalPct;
-
-  const totalFees = swappFee + paypalFee;
-  const net = Math.max(0, amount - totalFees);
-
-  const min = currency === "USD" ? 5 : 150; // solo UI
-  const max = currency === "USD" ? 5000 : 120000; // solo UI
-
-  return (
-    <div className="card withdraw h-100">
-      <div className="card-body">
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <h5 className="fw-bold mb-0">Retiro a PayPal</h5>
-          <span className="small text-muted d-inline-flex align-items-center gap-2">
-            {/* PayPal logo simple svg */}
-            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="#003087"
-                d="M20.4 4.5C19.2 2.8 16.9 2 13.9 2H7.8c-.5 0-1 .4-1.1.9L4 19.3c-.1.6.3 1.1.9 1.1h3.4l.3-1.9v.1c.1-.5.5-.9 1-.9h1.9c3.8 0 6.7-1.5 7.5-5.9.3-1.8.1-3.1-.5-4.3Z"
-              />
-              <path
-                fill="#009CDE"
-                d="M21 9.4c-.9 4.4-3.8 5.9-7.5 5.9H11.7c-.5 0-.9.4-1 .9L10.4 21h3.1c.6 0 1.1-.4 1.2-1l.3-1.6c0-.1.1-.3.3-.3 2.5 0 4.4-1 5-3.9.2-1 .2-2 0-2.8Z"
-              />
-            </svg>
-            PayPal (UI)
-          </span>
-        </div>
-
-        <div className="alert alert-warning small" role="alert">
-          Este cálculo es <strong>estimado</strong>. Las tarifas reales dependen de tu
-          cuenta PayPal y país. El retiro se procesa a la <strong>cuenta PayPal</strong> que
-          indiques.
-        </div>
-
-        <div className="row g-3">
-          <div className="col-lg-7">
-            <div className="provider rounded-3">
-              <div className="mb-2 fw-bold">Detalles del retiro</div>
-
-              <div className="mb-2">
-                <label className="form-label small text-muted">
-                  Nombre del titular (como aparece en PayPal)
-                </label>
-                <input
-                  className="form-control"
-                  placeholder="Ej. Juan Pérez"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
-
-              <div className="mb-2">
-                <label className="form-label small text-muted">
-                  Correo de PayPal
-                </label>
-                <input
-                  className="form-control"
-                  placeholder="tu-correo@paypal.com"
-                  value={paypalEmail}
-                  onChange={(e) => setPaypalEmail(e.target.value)}
-                />
-              </div>
-
-              <div className="row g-2 mb-2">
-                <div className="col-7">
-                  <label className="form-label small text-muted">
-                    Monto a retirar
-                  </label>
-                  <input
-                    className="form-control"
-                    value={amountStr}
-                    onChange={(e) => setAmountStr(e.target.value)}
-                  />
-                </div>
-                <div className="col-5">
-                  <label className="form-label small text-muted">Moneda</label>
-                  <select
-                    className="form-select"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value as "HNL" | "USD")}
-                  >
-                    <option value="HNL">HNL</option>
-                    <option value="USD">USD</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label small text-muted">Nota (opcional)</label>
-                <input
-                  className="form-control"
-                  placeholder="Mensaje para el retiro"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </div>
-
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <div className="small text-muted">Comisiones estimadas</div>
-                  <div className="fw-bold">
-                    {fmt(totalFees, currency)}{" "}
-                    <small className="text-muted">({fmt(swappFee, currency)} Swapp + {fmt(paypalFee, currency)} PayPal)</small>
-                  </div>
-                </div>
-                <button className="btn btn-withdraw px-4" disabled={!accept}>
-                  Solicitar retiro
-                </button>
-              </div>
-
-              <div className="form-check mt-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="acceptFees"
-                  checked={accept}
-                  onChange={(e) => setAccept(e.target.checked)}
-                />
-                <label className="form-check-label small text-muted" htmlFor="acceptFees">
-                  Acepto las tarifas estimadas y políticas de retiro.
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-5">
-            <div className="p-3 rounded-3 h-100">
-              <div className="fw-bold mb-2">Requisitos y reglas (PayPal)</div>
-
-              <div className="rule mb-2">
-                <div className="fw-bold">{fmt(min, currency)}</div>
-                <small>Monto mínimo por retiro</small>
-              </div>
-
-              <div className="rule mb-2">
-                <div className="fw-bold">{fmt(max, currency)}</div>
-                <small>Monto máximo por retiro</small>
-              </div>
-
-              <div className="rule mb-2">
-                <div className="fw-bold">Cuenta verificada</div>
-                <small>Tu cuenta PayPal debe estar activa y verificada.</small>
-              </div>
-
-              <div className="rule mb-2">
-                <div className="fw-bold">2–72 h</div>
-                <small>Tiempo de acreditación estimado</small>
-              </div>
-
-              <div className="rule">
-                <div className="fw-bold">Monedas</div>
-                <small>Procesamos HNL y USD (según disponibilidad de tu cuenta).</small>
-              </div>
-
-              <hr />
-
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <div className="small text-muted">Recibirás aprox.</div>
-                  <div className="fw-bold">{fmt(net, currency)}</div>
-                </div>
-                <button className="btn btn-outline-secondary">
-                  Conectar PayPal
-                </button>
-              </div>
-
-              <div className="small text-muted mt-2">
-                * La conversión de moneda (si aplica) y la tarifa fija de PayPal
-                pueden variar según país/cuenta.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/** === Page === */
+/** === Página principal === */
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const display = user?.displayName || user?.email || "Usuario";
-  const initials = getInitials(display);
-  const avatarUrl = user?.photoURL ?? "";
 
   return (
     <div className="client-dashboard">
@@ -391,7 +212,6 @@ const DashboardPage: React.FC = () => {
               <span>Retiros</span>
             </a>
 
-            {/* Historial con submenú */}
             <button
               className="nav-link nav-link-btn"
               data-bs-toggle="collapse"
@@ -463,12 +283,9 @@ const DashboardPage: React.FC = () => {
                 className="btn p-0 dropdown-toggle user-toggle"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                aria-label={display}
               >
-                {avatarUrl ? (
-                  <img className="avatar-img" src={avatarUrl} alt={display} />
-                ) : (
-                  <div className="avatar">{initials}</div>
-                )}
+                <UserAvatar photoURL={user?.photoURL} size={38} />
               </button>
 
               <div className="dropdown-menu dropdown-menu-end user-menu">
@@ -494,6 +311,7 @@ const DashboardPage: React.FC = () => {
           </header>
 
           <section className="content">
+            {/* Stats */}
             <div className="row g-3 mb-3">
               <div className="col-12 col-sm-6 col-xl-3">
                 <StatCard
@@ -529,9 +347,10 @@ const DashboardPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Secciones */}
             <div className="row g-3 mb-3">
               <div className="col-12 col-xl-7">
-                <PaypalWithdrawWidget />
+                {/* Aquí tu PaypalWithdrawWidget */}
               </div>
               <div className="col-12 col-xl-5">
                 <Activity />
@@ -545,64 +364,6 @@ const DashboardPage: React.FC = () => {
             </div>
           </section>
         </div>
-
-        {/* Sidebar móvil */}
-        <aside
-          id="sbOff"
-          className="offcanvas offcanvas-start sidebar d-lg-none"
-        >
-          <div className="offcanvas-body p-0 d-flex flex-column">
-            <div className="brand">
-              <span className="dot" />
-              <span className="brand-text">Swapp</span>
-            </div>
-            <nav className="nav flex-column">
-              <a
-                className="nav-link active"
-                data-bs-dismiss="offcanvas"
-                href="#"
-              >
-                <FiHome />
-                <span>Panel</span>
-              </a>
-              <a className="nav-link" data-bs-dismiss="offcanvas" href="#">
-                <FiCreditCard />
-                <span>Retiros</span>
-              </a>
-
-              <button
-                className="nav-link nav-link-btn"
-                data-bs-toggle="collapse"
-                data-bs-target="#subHistorialM"
-                aria-expanded="false"
-                aria-controls="subHistorialM"
-                type="button"
-              >
-                <FiClock />
-                <span>Historial</span>
-                <FiChevronDown className="caret" />
-              </button>
-              <div id="subHistorialM" className="collapse">
-                <div className="nav-sub">
-                  <a
-                    className="nav-sublink"
-                    data-bs-dismiss="offcanvas"
-                    href="#"
-                  >
-                    <span>Historial de puntos</span>
-                  </a>
-                  <a
-                    className="nav-sublink"
-                    data-bs-dismiss="offcanvas"
-                    href="#"
-                  >
-                    <span>Historial de canjes</span>
-                  </a>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </aside>
       </div>
     </div>
   );
