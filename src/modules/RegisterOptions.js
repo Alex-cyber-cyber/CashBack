@@ -1,0 +1,8 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useNavigate } from "react-router-dom";
+import "./styles.scss";
+const RegisterOptions = () => {
+    const navigate = useNavigate();
+    return (_jsxs("div", { className: "auth-container", children: [_jsx("div", { className: "auth-left-panel", children: _jsxs("div", { className: "brand-content", children: [_jsxs("h1", { className: "brand-title", children: ["Transforma tus compras en ", _jsx("span", { className: "highlight", children: "recompensas" })] }), _jsx("p", { className: "brand-subtitle", children: "Reg\u00EDstrate y empieza a acumular beneficios exclusivos." })] }) }), _jsxs("div", { className: "auth-right-panel", children: [_jsxs("div", { className: "form-header", children: [_jsx("h2", { className: "welcome-title", children: "Elige tu tipo de cuenta" }), _jsx("p", { className: "welcome-subtitle", children: "Selecciona c\u00F3mo deseas ingresar" })] }), _jsxs("div", { className: "options-container", children: [_jsxs("div", { className: "option-card", onClick: () => navigate("/register/emprendedor"), children: [_jsx("h3", { className: "welcome-title", children: "\uD83D\uDE80 Soy Emprendedor" }), _jsx("p", { className: "brand-subtitle", children: "Inicia Sesion o Crea tu cuenta y haz crecer tu negocio." })] }), _jsxs("div", { className: "option-card", onClick: () => navigate("/login"), children: [_jsx("h3", { className: "welcome-title", children: "\uD83D\uDECD\uFE0F Soy Cliente" }), _jsx("p", { className: "brand-subtitle", children: "Inicia sesion o Registrate y descubre productos \u00FAnicos y gana recompensas en tus compras." })] })] })] })] }));
+};
+export default RegisterOptions;
