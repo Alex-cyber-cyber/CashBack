@@ -1,0 +1,161 @@
+@import '../../../../shared/styles/variables.scss';
+@import '../../../../shared/styles/global.scss';
+
+.canjes-page {
+  color: var(--text);
+
+  /* ==== Header button (refrescar) ==== */
+  .btn-client-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--primary);
+    border-radius: var(--radius);
+    padding: .35rem .7rem;
+    &:hover { background: rgba(0,0,0,.04); border-color: var(--primary); }
+    &:focus-visible { outline: var(--focus-ring); }
+  }
+
+  /* ==== Card de saldo (gradiente) ==== */
+  .saldo-card {
+    position: relative;
+    background: var(--gradient);
+    color: #fff;
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.12), 0 6px 16px rgba(0,0,0,.08);
+    overflow: hidden;
+
+    &:before{
+      content:"";
+      position:absolute; inset:0;
+      box-shadow: inset 0 -60px 120px rgba(0,0,0,.18), inset 0 2px 12px rgba(0,0,0,.08);
+      pointer-events:none;
+    }
+
+    .saldo-label { opacity: .95; font-weight: 600; letter-spacing:.2px; }
+    .saldo-valor { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; }
+  }
+
+  /* ==== Caja de generación (glass) sobre el gradiente ==== */
+  .gen-box {
+    background: rgba(255,255,255,.92);
+    backdrop-filter: saturate(120%) blur(4px);
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 14px;
+    padding: .65rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+
+    label { color: #334155; font-weight: 600; }
+    .form-control {
+      background: #fff;
+      color: #0f172a;
+      border: 1.2px solid #e5e7eb;
+      border-radius: 10px;
+      height: 40px;
+      &:focus { border-color: #94a3b8; box-shadow: 0 0 0 3px rgba(148,163,184,.25); }
+    }
+  }
+
+  /* ==== Botón azul marino (generar) ==== */
+  .btn-client {
+    background: var(--navy, #0f2d5c);
+    color: #fff;
+    border: none;
+    height: 40px;
+    border-radius: 10px;
+    padding: 0 .95rem;
+    font-weight: 600;
+    box-shadow: 0 10px 22px rgba(15,45,92,.18);
+    transition: transform .06s ease, filter .15s ease, background .15s ease;
+    &:hover { background: var(--navy-hover, #0c244d); transform: translateY(-1px); }
+    &:disabled { filter: grayscale(.2) opacity(.85); box-shadow: none; }
+    &:focus-visible { outline: 3px solid rgba(15,45,92,.35); outline-offset: 2px; }
+  }
+
+  /* ==== Container de tarjetas/tabla ==== */
+  .client-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px rgba(2,6,23,.06);
+  }
+
+  /* ==== Tabla accesible ==== */
+  .table {
+    margin-bottom: 0;
+    thead th {
+      background: #f8fafc;
+      color: #0f172a;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 700;
+      letter-spacing: .15px;
+    }
+    tbody tr {
+      border-color: #eef2f7;
+      &:nth-child(odd){ background: #fcfdff; }
+      &:hover { background: #f3f6fb; }
+    }
+    td, th { vertical-align: middle; }
+  }
+
+  /* ==== Chips ==== */
+  .chip {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .2rem .6rem; border-radius: 999px;
+    font-size: .82rem; font-weight: 700; letter-spacing:.2px;
+    &.ok   { background: rgba(34,197,94,.12);  color: #16a34a; border: 1px solid rgba(34,197,94,.25); }
+    &.bad  { background: rgba(239,68,68,.12);  color: #dc2626; border: 1px solid rgba(239,68,68,.25); }
+    &.info { background: rgba(59,130,246,.10); color: #2563eb; border: 1px solid rgba(59,130,246,.22); }
+  }
+
+  .note { color: var(--text-muted); }
+
+  @media (max-width: 768px){
+    .gen-box { width: 100%; }
+    .saldo-card .card-body { gap: 1rem !important; }
+  }
+}
+
+/* ==== Dark mode ==== */
+[data-theme="dark"] .canjes-page,
+body.dark .canjes-page {
+  .saldo-card:before { box-shadow: inset 0 -60px 120px rgba(0,0,0,.35), inset 0 2px 12px rgba(0,0,0,.18); }
+  .gen-box {
+    background: rgba(17, 24, 39, .8);
+    border-color: rgba(148,163,184,.25);
+    label { color:#e5e7eb; }
+    .form-control {
+      background: #0b1220; color: #e5e7eb; border-color: #334155;
+      &:focus { border-color: #64748b; box-shadow: 0 0 0 3px rgba(99,102,241,.28); }
+    }
+  }
+  .table {
+    thead th { background: #0f1629; color: #e5e7eb; border-bottom-color:#1f2937; }
+    tbody tr { border-color: #1f2937; &:nth-child(odd){ background:#0c1221; } &:hover{ background:#121a31; } }
+  }
+  .client-card { background:#0b1220; border-color:#182036; box-shadow: none; }
+  .note { color:#9aa3af; }
+}
+/* ===== Fondo con contraste para la vista ===== */
+.canjes-bg {
+  min-height: 100dvh;
+  padding: 24px 0;
+
+  /* capas de degradés suaves */
+  background:
+    radial-gradient(1200px 600px at -10% -20%, #fff1f2 0%, transparent 40%),
+    radial-gradient(1100px 700px at 110% 15%, #e0f2fe 0%, transparent 45%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%); /* base */
+
+  /* por si hay bordes */
+  background-attachment: fixed;
+}
+
+/* Dark mode */
+[data-theme="dark"] .canjes-bg,
+body.dark .canjes-bg {
+  background:
+    radial-gradient(1200px 600px at -10% -20%, rgba(255, 95, 109, .12) 0%, transparent 40%),
+    radial-gradient(1100px 700px at 110% 15%, rgba(59, 130, 246, .12) 0%, transparent 45%),
+    linear-gradient(180deg, #0a0f1a 0%, #0c1221 100%);
+}

@@ -409,7 +409,7 @@ const DashboardPage: React.FC = () => {
                 <a className="nav-sublink" href="#">
                   <span>Historial de puntos</span>
                 </a>
-                <a className="nav-sublink" href="#">
+                <a className="nav-sublink" href="/dashboard/canjes">
                   <span>Historial de canjes</span>
                 </a>
               </div>

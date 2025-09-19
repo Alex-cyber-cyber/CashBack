@@ -9,20 +9,21 @@ import RegisterCliente from "./modules/clientes/auth/pages/RegisterCliente";
 import LoginPage from "./modules/clientes/auth/pages/LoginPage";
 import LoginEmprendedor from "./modules/emprendedores/auth/pages/LoginEmprendedor";
 
-// DASHBOARDS (clientes y legacy emprendedor)
+// DASHBOARDS
 import DashboardPage from "./modules/clientes/dashboard/pages/DashboardPage";
-import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp"; // si aún lo usas
+import DashboardEmp from "./modules/emprendedores/dashboard/pages/DashboardEmp";
 
 // PROTEGIDAS
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-// RUTAS DEL MÓDULO EMPRENDEDORES (nuevo layout + páginas: panel, registrar, canjear, historial, config)
+// NUEVO: Canjes del cliente
+import CanjesPage from "./modules/clientes/dashboard/pages/CanjesPage";
+
+// RUTAS EMPRENDEDORES
 import { emprendedoresRoutes } from "./modules/emprendedores/dashboard/routes";
 
 export default function App() {
-  // Define TODO el árbol de rutas aquí
   const routes: RouteObject[] = [
-    // redirect raíz
     { path: "/", element: <Navigate to="/register" replace /> },
 
     // públicas
@@ -32,7 +33,15 @@ export default function App() {
     { path: "/login", element: <LoginPage /> },
     { path: "/login/emprendedor", element: <LoginEmprendedor /> },
 
-    // dashboard de clientes (protegido)
+    // cliente protegido
+    {
+      path: "/dashboard/canjes",
+      element: (
+        <ProtectedRoute>
+          <CanjesPage />
+        </ProtectedRoute>
+      ),
+    },
     {
       path: "/dashboard",
       element: (
@@ -42,17 +51,17 @@ export default function App() {
       ),
     },
 
-    // (opcional) dashboard emprendedor legacy si todavía lo usas en paralelo
+    // emprendedor (legacy)
     { path: "/dashboard/emprendedor", element: <DashboardEmp /> },
 
-    // >>> módulo Emprendedores NUEVO: /emp, /emp/panel, /emp/canjear, etc.
-    emprendedoresRoutes,
+    // módulo emprendedores NUEVO:
+    // Si emprendedoresRoutes es un solo objeto:
+    // emprendedoresRoutes,
+    // Si es un arreglo:
+    ...(Array.isArray(emprendedoresRoutes) ? emprendedoresRoutes : [emprendedoresRoutes]),
 
-    // catch-all
     { path: "*", element: <Navigate to="/register" replace /> },
   ];
 
-  // Render del árbol
-  const element = useRoutes(routes);
-  return element;
+  return useRoutes(routes);
 }
