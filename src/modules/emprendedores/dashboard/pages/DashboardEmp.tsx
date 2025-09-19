@@ -1,137 +1,103 @@
+// src/modules/emprendedores/dashboard/pages/DashboardEmp.tsx
 import React, { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import {
-  FiPlusCircle, FiGift, FiClock, FiSettings,
-  FiBell, FiSearch, FiMoon, FiSun, FiMenu, FiGrid
-} from "react-icons/fi";
-import "../Styles/dashboardEmp.scss"; 
-
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { FiHome, FiUsers, FiCreditCard, FiLogOut } from "react-icons/fi";
+import { auth } from "../../../../../firebase/firebase.config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const EmpDashboardLayout: React.FC = () => {
-  const [theme, setTheme] = useState<"light" | "dark">(
-    () => (localStorage.getItem("theme") as "light" | "dark") || "light"
-  );
+  const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
-  const dark = theme === "dark";
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null); // 👈 muy importante para que caiga en "Invitado"
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
-  const ThemeToggle = () => (
-    <button
-      className="theme-toggle"
-      onClick={() => setTheme(dark ? "light" : "dark")}
-      aria-label="Cambiar tema"
-    >
-      {dark ? <FiSun /> : <FiMoon />}{" "}
-      <span className="d-none d-sm-inline">{dark ? "Claro" : "Oscuro"}</span>
-    </button>
-  );
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   return (
-    <div className="emp-dashboard">
-      <div className="emp-grid">
-        {/* Sidebar */}
-        <aside className="sidebar d-none d-lg-flex">
-          <div className="brand" onClick={() => navigate("/emp/panel")} role="button">
-            <span className="dot" />
-            <span className="brand-text">Emprende+</span>
-          </div>
+    <div className="d-flex">
+      {/* Sidebar */}
+      <aside className="sidebar bg-dark text-white p-3">
+        <h4 className="text-center mb-4">Panel Empresarial</h4>
+        <ul className="nav flex-column gap-2">
+          <li className="nav-item">
+            <Link to="/emp/panel" className="nav-link text-white d-flex align-items-center gap-2">
+              <FiHome /> Inicio
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/emp/RegistroPuntos" className="nav-link text-white d-flex align-items-center gap-2">
+              <FiUsers /> Registro Puntos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/emp/CanjePuntos" className="nav-link text-white d-flex align-items-center gap-2">
+              <FiCreditCard /> Canje Puntos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/emp/historial" className="nav-link text-white d-flex align-items-center gap-2">
+              <FiUsers /> Historial
+            </Link>
+          </li>
+        </ul>
+      </aside>
 
-          <nav className="nav flex-column">
-            <NavLink className="nav-link" to="/emp/panel">
-              <FiGrid /><span>Panel</span>
-            </NavLink>
-            <NavLink className="nav-link" to="/emp/RegistroPuntos">
-              <FiPlusCircle /><span>Registrar Puntos</span>
-            </NavLink>
-            <NavLink className="nav-link" to="/emp/CanjePuntos">
-              <FiGift /><span>Canjear Puntos</span>
-            </NavLink>
-            <NavLink className="nav-link" to="/emp/historial">
-              <FiClock /><span>Historial</span>
-            </NavLink>
-          </nav>
+      {/* Main Content */}
+      <main className="flex-grow-1">
+        {/* Header */}
+        <header className="d-flex justify-content-between align-items-center p-3 border-bottom">
+          <h5 className="m-0">Dashboard Empresarial</h5>
 
-          <div className="get-card mt-auto">
-            <div className="fw-bold mb-1">Consejo</div>
-            <div className="small text-muted mb-2">
-              Usa el Panel para acceder rápido a Registrar/Canjear.
-            </div>
-            <button className="btn btn-gradient w-100" onClick={() => navigate("/emp/panel")}>
-              Ir al Panel
-            </button>
-          </div>
-        </aside>
-
-        {/* Main */}
-        <div className="main">
-          <header className="topbar">
-            <button
-              className="hamburger d-lg-none"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#sbOffEmp"
-              aria-label="Abrir menú"
+          <div className="user d-flex align-items-center gap-2">
+            {/* Avatar con iniciales o "IN" */}
+            <div
+              className="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+              style={{ width: 40, height: 40 }}
             >
-              <FiMenu />
-            </button>
-
-            <div className="search input-group">
-              <span className="input-group-text border-0"><FiSearch /></span>
-              <input className="form-control" placeholder="Buscar cliente o transacción…" />
+              {user?.email ? user.email.slice(0, 2).toUpperCase() : "IN"}
             </div>
 
-            <ThemeToggle />
-
-            <button className="btn btn-light border rounded-circle p-2" aria-label="Notificaciones">
-              <FiBell />
-            </button>
-
-            <div className="user">
-              <div className="avatar">EM</div>
-              <div className="d-none d-md-block">
-                <div className="fw-bold">Emprendedor</div>
-                <small className="text-muted-2">Administrador</small>
-              </div>
+            {/* Info usuario */}
+            <div className="d-none d-md-block text-end">
+              <div className="fw-bold">{user ? user.email : "Invitado"}</div>
+              <small className="text-muted-2">
+                {user ? "Administrador" : "Visitante"}
+              </small>
             </div>
-          </header>
 
-          {/* Aquí se renderizan las páginas */}
-          <section className="content">
-            <Outlet />
-          </section>
-        </div>
-
-        {/* Sidebar móvil */}
-        <aside id="sbOffEmp" className="offcanvas offcanvas-start sidebar d-lg-none">
-          <div className="offcanvas-body p-0 d-flex flex-column">
-            <div className="brand" data-bs-dismiss="offcanvas" onClick={() => navigate("/emp/panel")} role="button">
-              <span className="dot" />
-              <span className="brand-text">Emprende+</span>
-            </div>
-            <nav className="nav flex-column">
-              <NavLink className="nav-link" to="/emp/panel" data-bs-dismiss="offcanvas">
-                <FiGrid /><span>Panel</span>
-              </NavLink>
-              <NavLink className="nav-link" to="/emp/RegistroPuntos" data-bs-dismiss="offcanvas">
-                <FiPlusCircle /><span>Registrar Puntos</span>
-              </NavLink>
-              <NavLink className="nav-link" to="/emp/canjear" data-bs-dismiss="offcanvas">
-                <FiGift /><span>Canjear Puntos</span>
-              </NavLink>
-              <NavLink className="nav-link" to="/emp/historial" data-bs-dismiss="offcanvas">
-                <FiClock /><span>Historial</span>
-              </NavLink>
-              <NavLink className="nav-link" to="/emp/config" data-bs-dismiss="offcanvas">
-                <FiSettings /><span>Configuración</span>
-              </NavLink>
-            </nav>
+            {/* Botón de logout (solo si hay usuario) */}
+            {user && (
+              <button
+                className="btn btn-sm btn-outline-danger ms-2"
+                onClick={handleLogout}
+                title="Cerrar sesión"
+              >
+                <FiLogOut />
+              </button>
+            )}
           </div>
-        </aside>
-      </div>
+        </header>
+
+        <div className="p-4">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 };
