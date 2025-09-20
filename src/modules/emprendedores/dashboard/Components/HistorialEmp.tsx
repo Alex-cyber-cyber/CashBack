@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   FiDownloadCloud,
   FiSearch,
@@ -7,16 +7,48 @@ import {
   FiTrendingUp,
   FiRefreshCcw,
 } from "react-icons/fi";
-import { useAuth as useClienteAuth } from "../../../clientes/auth/hooks/useAuth";
-import {
-  loadHistorialCanjes,
-  loadHistorialRegistros,
-  type CanjeHistorial,
-  type RegistroHistorial,
-} from "../services/historial.service";
 import "./Styles/HistorialEmp.scss";
 
 type TabKey = "registro" | "canje";
+type StatusTone = "success" | "warning" | "danger";
+
+const registroMeta: Record<string, { label: string; tone: StatusTone }> = {
+  acreditado: { label: "Acreditado", tone: "success" },
+  pendiente: { label: "Pendiente", tone: "warning" },
+  anulado: { label: "Anulado", tone: "danger" },
+};
+
+const canjeMeta: Record<string, { label: string; tone: StatusTone }> = {
+  completado: { label: "Completado", tone: "success" },
+  pendiente: { label: "Pendiente", tone: "warning" },
+  rechazado: { label: "Rechazado", tone: "danger" },
+};
+
+type RegistroRow = {
+  id: string;
+  fecha: Date;
+  cliente: string;
+  identidad: string;
+  correo: string;
+  comercio: string;
+  factura: string;
+  total: number;
+  puntos: number;
+  estado: keyof typeof registroMeta;
+};
+
+type CanjeRow = {
+  id: string;
+  fecha: Date;
+  cliente: string;
+  identidad: string;
+  correo: string;
+  premio: string;
+  canal: string;
+  puntos: number;
+  valor: number;
+  estado: keyof typeof canjeMeta;
+};
 
 type Summary = {
   registros: number;
@@ -27,8 +59,6 @@ type Summary = {
   puntosCanjeados: number;
   saldoEstimado: number;
 };
-
-type StatusTone = "success" | "warning" | "danger";
 
 const currencyFormatter = new Intl.NumberFormat("es-HN", {
   style: "currency",
@@ -47,17 +77,107 @@ const dateFormatter = new Intl.DateTimeFormat("es-HN", {
   minute: "2-digit",
 });
 
-const registroMeta: Record<string, { label: string; tone: StatusTone }> = {
-  acreditado: { label: "Acreditado", tone: "success" },
-  pendiente: { label: "Pendiente", tone: "warning" },
-  anulado: { label: "Anulado", tone: "danger" },
-};
+const mockRegistros: RegistroRow[] = [
+  {
+    id: "REG-1045",
+    fecha: new Date("2024-08-12T10:30:00"),
+    cliente: "Maria Hernandez",
+    identidad: "0801-1994-12345",
+    correo: "maria.hdz@example.com",
+    comercio: "Cafe La Taza",
+    factura: "F-2345",
+    total: 1560.45,
+    puntos: 156,
+    estado: "acreditado",
+  },
+  {
+    id: "REG-1046",
+    fecha: new Date("2024-08-13T09:05:00"),
+    cliente: "Carlos Mejia",
+    identidad: "0801-1988-54321",
+    correo: "carlos.mejia@example.com",
+    comercio: "Mercadito Central",
+    factura: "F-2338",
+    total: 820.0,
+    puntos: 82,
+    estado: "pendiente",
+  },
+  {
+    id: "REG-1038",
+    fecha: new Date("2024-08-10T16:45:00"),
+    cliente: "Luisa Torres",
+    identidad: "0801-1990-87654",
+    correo: "luisa.torres@example.com",
+    comercio: "Moda Express",
+    factura: "F-2297",
+    total: 2350.85,
+    puntos: 235,
+    estado: "acreditado",
+  },
+  {
+    id: "REG-1029",
+    fecha: new Date("2024-08-08T12:15:00"),
+    cliente: "Jorge Alvarez",
+    identidad: "0801-1985-45981",
+    correo: "jorge.alvarez@example.com",
+    comercio: "TechHub",
+    factura: "F-2251",
+    total: 5120.0,
+    puntos: 512,
+    estado: "anulado",
+  },
+];
 
-const canjeMeta: Record<string, { label: string; tone: StatusTone }> = {
-  completado: { label: "Completado", tone: "success" },
-  pendiente: { label: "Pendiente", tone: "warning" },
-  rechazado: { label: "Rechazado", tone: "danger" },
-};
+const mockCanjes: CanjeRow[] = [
+  {
+    id: "CAN-2090",
+    fecha: new Date("2024-08-14T11:20:00"),
+    cliente: "Maria Hernandez",
+    identidad: "0801-1994-12345",
+    correo: "maria.hdz@example.com",
+    premio: "Giftcard Cafe",
+    canal: "Canal web",
+    puntos: 120,
+    valor: 600,
+    estado: "completado",
+  },
+  {
+    id: "CAN-2087",
+    fecha: new Date("2024-08-12T15:40:00"),
+    cliente: "Carlos Mejia",
+    identidad: "0801-1988-54321",
+    correo: "carlos.mejia@example.com",
+    premio: "Descuento 15%",
+    canal: "Punto de venta",
+    puntos: 80,
+    valor: 400,
+    estado: "pendiente",
+  },
+  {
+    id: "CAN-2079",
+    fecha: new Date("2024-08-09T18:05:00"),
+    cliente: "Luisa Torres",
+    identidad: "0801-1990-87654",
+    correo: "luisa.torres@example.com",
+    premio: "Kit de bienvenida",
+    canal: "App movil",
+    puntos: 150,
+    valor: 750,
+    estado: "completado",
+  },
+  {
+    id: "CAN-2072",
+    fecha: new Date("2024-08-07T09:55:00"),
+    cliente: "Jorge Alvarez",
+    identidad: "0801-1985-45981",
+    correo: "jorge.alvarez@example.com",
+    premio: "Cupon 2x1",
+    canal: "Punto de venta",
+    puntos: 90,
+    valor: 450,
+    estado: "rechazado",
+  },
+];
 
 const columnsCount = 8;
 
@@ -70,62 +190,17 @@ const toCsvValue = (value: string | number) => {
 };
 
 const HistorialEmp: React.FC = () => {
-  const { user, loading: authLoading } = useClienteAuth();
-  const emprendedorId = user?.uid ?? null;
-
   const [tab, setTab] = useState<TabKey>("registro");
   const [search, setSearch] = useState("");
-  const [registros, setRegistros] = useState<RegistroHistorial[]>([]);
-  const [canjes, setCanjes] = useState<CanjeHistorial[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-
-  const loadData = useCallback(async (id: string) => {
-    setLoading(true);
-    try {
-      const [registrosData, canjesData] = await Promise.all([
-        loadHistorialRegistros(id),
-        loadHistorialCanjes(id),
-      ]);
-      setRegistros(registrosData);
-      setCanjes(canjesData);
-      setLastUpdated(new Date());
-      setError(null);
-    } catch (err) {
-      console.error("Error cargando historial", err);
-      const message =
-        err instanceof Error ? err.message : "No se pudo cargar el historial.";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (authLoading) return;
-
-    if (!emprendedorId) {
-      setRegistros([]);
-      setCanjes([]);
-      setLoading(false);
-      setError("Debes iniciar sesión como emprendedor para ver tu historial.");
-      return;
-    }
-
-    loadData(emprendedorId);
-  }, [authLoading, emprendedorId, loadData]);
-
-  const handleRefresh = useCallback(() => {
-    if (!emprendedorId) return;
-    loadData(emprendedorId);
-  }, [emprendedorId, loadData]);
+  const [lastUpdated, setLastUpdated] = useState<Date>(
+    new Date("2024-09-05T09:15:00Z")
+  );
 
   const filteredRegistros = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) return registros;
+    if (!term) return mockRegistros;
 
-    return registros.filter((item) => {
+    return mockRegistros.filter((item) => {
       const fields = [
         item.cliente,
         item.correo,
@@ -138,13 +213,13 @@ const HistorialEmp: React.FC = () => {
       ];
       return fields.some((field) => field.toLowerCase().includes(term));
     });
-  }, [search, registros]);
+  }, [search]);
 
   const filteredCanjes = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) return canjes;
+    if (!term) return mockCanjes;
 
-    return canjes.filter((item) => {
+    return mockCanjes.filter((item) => {
       const fields = [
         item.cliente,
         item.correo,
@@ -157,34 +232,48 @@ const HistorialEmp: React.FC = () => {
       ];
       return fields.some((field) => field.toLowerCase().includes(term));
     });
-  }, [search, canjes]);
+  }, [search]);
 
-  const summary: Summary = useMemo(() => {
-    const totalFactura = registros.reduce((acc, item) => acc + item.total, 0);
-    const puntosGenerados = registros.reduce((acc, item) => acc + item.puntos, 0);
-    const valorCanjeado = canjes.reduce((acc, item) => acc + item.valor, 0);
-    const puntosCanjeados = canjes.reduce((acc, item) => acc + item.puntos, 0);
-
+  const summary = useMemo<Summary>(() => {
+    const totalFactura = mockRegistros.reduce((acc, item) => acc + item.total, 0);
+    const puntosGenerados = mockRegistros.reduce(
+      (acc, item) => acc + item.puntos,
+      0
+    );
+    const valorCanjeado = mockCanjes.reduce((acc, item) => acc + item.valor, 0);
+    const puntosCanjeados = mockCanjes.reduce(
+      (acc, item) => acc + item.puntos,
+      0
+    );
     return {
-      registros: registros.length,
+      registros: mockRegistros.length,
       totalFactura,
       puntosGenerados,
-      canjes: canjes.length,
+      canjes: mockCanjes.length,
       valorCanjeado,
       puntosCanjeados,
-      saldoEstimado: puntosGenerados - puntosCanjeados,
+      saldoEstimado: Math.max(puntosGenerados - puntosCanjeados, 0),
     };
-  }, [registros, canjes]);
+  }, []);
 
   const showingRegistro = tab === "registro";
-  const rows = showingRegistro ? filteredRegistros : filteredCanjes;
-  const totalRows = showingRegistro ? registros.length : canjes.length;
+  const rows = useMemo(
+    () => (showingRegistro ? filteredRegistros : filteredCanjes),
+    [filteredCanjes, filteredRegistros, showingRegistro]
+  );
+  const totalRows = showingRegistro
+    ? mockRegistros.length
+    : mockCanjes.length;
+  const busy = false;
+  const exportDisabled = rows.length === 0;
 
-  const busy = loading || authLoading;
-  const exportDisabled = busy || rows.length === 0;
+  const handleRefresh = useCallback(() => {
+    setLastUpdated(new Date());
+  }, []);
 
   const handleExport = useCallback(() => {
     if (rows.length === 0) return;
+
     const headers = showingRegistro
       ? [
           "Tipo",
@@ -213,7 +302,7 @@ const HistorialEmp: React.FC = () => {
 
     const csvBody = rows.map((item) => {
       if (showingRegistro) {
-        const registro = item as RegistroHistorial;
+        const registro = item as RegistroRow;
         return [
           "Registro",
           dateFormatter.format(registro.fecha),
@@ -228,7 +317,7 @@ const HistorialEmp: React.FC = () => {
         ].join(",");
       }
 
-      const canje = item as CanjeHistorial;
+      const canje = item as CanjeRow;
       return [
         "Canje",
         dateFormatter.format(canje.fecha),
@@ -258,11 +347,17 @@ const HistorialEmp: React.FC = () => {
     URL.revokeObjectURL(url);
   }, [rows, showingRegistro]);
 
-  const renderMeta = (estado: string, mapSource: typeof registroMeta | typeof canjeMeta) => {
-    const meta = mapSource[estado] ?? {
-      label: estado ? estado.charAt(0).toUpperCase() + estado.slice(1) : "Pendiente",
-      tone: "warning" as StatusTone,
-    };
+  const renderMeta = (
+    estado: string,
+    mapSource: typeof registroMeta | typeof canjeMeta
+  ) => {
+    const meta =
+      mapSource[estado] ?? {
+        label: estado
+          ? estado.charAt(0).toUpperCase() + estado.slice(1)
+          : "Pendiente",
+        tone: "warning" as StatusTone,
+      };
     return (
       <span className={`status-badge tone-${meta.tone}`}>
         {meta.label}
@@ -290,18 +385,6 @@ const HistorialEmp: React.FC = () => {
         </button>
       </div>
 
-      {error && (
-        <div className="historial-warning" role="alert">
-          <span>{error}</span>
-          {emprendedorId && (
-            <button type="button" onClick={handleRefresh} disabled={busy}>
-              <FiRefreshCcw />
-              Reintentar
-            </button>
-          )}
-        </div>
-      )}
-
       <div className="row g-3 summary-cards">
         <div className="col-12 col-md-4">
           <div className="card h-100">
@@ -321,13 +404,13 @@ const HistorialEmp: React.FC = () => {
         <div className="col-12 col-md-4">
           <div className="card h-100">
             <div className="card-body">
-              <div className="summary-icon warning">
+              <div className="summary-icon secondary">
                 <FiGift />
               </div>
-              <div className="summary-label">Canjes completados</div>
+              <div className="summary-label">Canjes procesados</div>
               <div className="summary-value">{summary.canjes}</div>
               <div className="summary-sub">
-                {numberFormatter.format(summary.puntosCanjeados)} pts canjeados
+                {currencyFormatter.format(summary.valorCanjeado)} canjeados
               </div>
             </div>
           </div>
@@ -396,7 +479,7 @@ const HistorialEmp: React.FC = () => {
                 {busy
                   ? "Cargando historial..."
                   : `Mostrando ${rows.length} de ${totalRows} registros`}
-                {lastUpdated && !busy && (
+                {!busy && lastUpdated && (
                   <span className="d-block small">
                     Actualizado: {dateFormatter.format(lastUpdated)}
                   </span>
@@ -406,7 +489,7 @@ const HistorialEmp: React.FC = () => {
                 type="button"
                 className="btn btn-light refresh-btn"
                 onClick={handleRefresh}
-                disabled={busy || !emprendedorId}
+                disabled={busy}
               >
                 <FiRefreshCcw />
                 <span>Actualizar</span>
@@ -465,7 +548,7 @@ const HistorialEmp: React.FC = () => {
                     </td>
                   </tr>
                 ) : showingRegistro ? (
-                  (rows as RegistroHistorial[]).map((item) => (
+                  (rows as RegistroRow[]).map((item) => (
                     <tr key={item.id}>
                       <td>
                         <div className="fw-semibold">
@@ -492,7 +575,7 @@ const HistorialEmp: React.FC = () => {
                     </tr>
                   ))
                 ) : (
-                  (rows as CanjeHistorial[]).map((item) => (
+                  (rows as CanjeRow[]).map((item) => (
                     <tr key={item.id}>
                       <td>
                         <div className="fw-semibold">
