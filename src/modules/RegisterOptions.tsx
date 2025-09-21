@@ -28,7 +28,7 @@ const RegisterOptions = () => {
         <div className="options-container">
           <div
             className="option-card"
-            onClick={() => navigate("/register/emprendedor")}
+            onClick={() => navigate("/login/emprendedor")}
           >
             <h3 className="welcome-title">🚀 Soy Emprendedor</h3>
             <p className="brand-subtitle">

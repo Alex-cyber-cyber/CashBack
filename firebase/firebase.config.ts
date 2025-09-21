@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { browserLocalPersistence, getAuth, setPersistence } from "firebase/auth";
+import { browserLocalPersistence, getAuth, setPersistence, signInAnonymously } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -21,6 +21,10 @@ setPersistence(auth, browserLocalPersistence);
 
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+export async function ensureTestAuth() {
+  if (!auth.currentUser) await signInAnonymously(auth);
+}
 
 
 
